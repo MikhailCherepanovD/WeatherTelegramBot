@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
@@ -70,12 +71,29 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 case "/location":
                      requestLocation(chatId);
-                     sendMessage(chatId, "Thank you for using the bot. We will start finding your city.");
                      break;
                 default:
                     sendMessage(chatId, "Sorry, command was not recognized");
             }
+        } else if(update.hasMessage() && update.getMessage().hasLocation()){
+            Location location = update.getMessage().getLocation();
+            handleLocation(location, update.getMessage().getChatId());
         }
+    }
+
+    private void handleLocation(Location location, Long chatId) {
+       sendMessage(chatId, "Thank you for using the bot. We will start finding your city.");
+       Double latitude = location.getLatitude();
+       Double longitude = location.getLongitude();
+       SendMessage message = new SendMessage();
+       message.setChatId(chatId);
+       message.setText("Additional coordinates:\nLatitude - " + latitude + ", Longitude - " + longitude);
+
+       try {
+           execute(message);
+       } catch (TelegramApiException e) {
+           log.error("Error sending location", e);
+       }
     }
 
     private void startCommandReceived (long chatId, String name) {
@@ -103,6 +121,7 @@ public class Bot extends TelegramLongPollingBot {
 
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setOneTimeKeyboard(true);
         List<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow row = new KeyboardRow();
         KeyboardButton button = new KeyboardButton();
