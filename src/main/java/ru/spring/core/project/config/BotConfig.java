@@ -10,9 +10,9 @@ public class BotConfig {
     @Value("${botConfig.token}")
      private String botToken;
     @Value("${botConfig.name}")
-     private String botName;
+     private String botName;//
     @Value("${botConfig.openWeatherMapKey")
-    String openWeatherMapKey;
+     private String openWeatherMapKey;
 
     public String getOpenWeatherMapKey() {
         return openWeatherMapKey;

@@ -29,8 +29,8 @@ public class Bot extends TelegramLongPollingBot {
        this.config = config;
        List<BotCommand> listOfCommands = new ArrayList();
        listOfCommands.add(new BotCommand("/start", "get a welcome message"));
-       //listOfCommands.add(new BotCommand("/sign_up", "sign up"));
-       //listOfCommands.add(new BotCommand("/sign_in", "sign in"));
+       listOfCommands.add(new BotCommand("/sign_up", "sign up"));
+       listOfCommands.add(new BotCommand("/sign_in", "sign in"));
        listOfCommands.add(new BotCommand("/location", "request location"));
        listOfCommands.add(new BotCommand("/help", "show help message"));
 
