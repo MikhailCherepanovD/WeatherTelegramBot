@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.spring.core.project.config.BotConfig;
+import ru.spring.core.project.weatherCommunication.WeatherRequestHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class Bot extends TelegramLongPollingBot {
        listOfCommands.add(new BotCommand("/sign_in", "sign in"));
        listOfCommands.add(new BotCommand("/location", "request location"));
        listOfCommands.add(new BotCommand("/help", "show help message"));
+       listOfCommands.add(new BotCommand("/name_city", "name city"));
 
        try {
            this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
@@ -72,7 +74,11 @@ public class Bot extends TelegramLongPollingBot {
                 case "/location":
                      requestLocation(chatId);
                      break;
+                case "/name_city":
+                    requestLocation(chatId);
+                    break;
                 default:
+
                     sendMessage(chatId, "Sorry, command was not recognized");
             }
         } else if(update.hasMessage() && update.getMessage().hasLocation()){
@@ -139,5 +145,16 @@ public class Bot extends TelegramLongPollingBot {
         }
 
     }
-
+    private void handleCity(long chatId, String cityName) {
+        WeatherRequestHandler weatherRequestHandler =  new WeatherRequestHandler();
+        String answer = weatherRequestHandler.GetAnswerCityNow(cityName);
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chatId));
+        sendMessage.setText(answer);
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            log.error("Error requesting location", e);
+        }
+    }
 }
