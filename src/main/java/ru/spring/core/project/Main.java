@@ -1,19 +1,13 @@
 package ru.spring.core.project;
 
-import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.generics.TelegramBot;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.spring.core.project.Bot.Bot;
+import ru.spring.core.project.config.BotInitializer;
 
 public class Main {
-    public static void main(String[] args) {
-        try {
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramBotsApi.registerBot(new Bot());
+    public static void main(String[] args) throws TelegramApiException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
+        context.getBean(BotInitializer.class).init();
     }
 }
