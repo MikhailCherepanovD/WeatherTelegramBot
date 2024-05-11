@@ -1,6 +1,5 @@
 package ru.spring.core.project.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -19,30 +18,34 @@ import ru.spring.core.project.weatherCommunication.WeatherRequestHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
-@Slf4j
 public class Bot extends TelegramLongPollingBot {
 
    private final BotConfig config;
+   private final WeatherRequestHandler weatherRequestHandler;
    static final String HELP_MESSAGE = "This bot идет нахуй потому что тут писать еще нечего";
+   private static final Logger logger = Logger.getLogger(Bot.class.getName());
+   private List<KeyboardRow> keyboard;
 
    public Bot(BotConfig config) {
        this.config = config;
+       weatherRequestHandler = new WeatherRequestHandler(config);
+       keyboard = new ArrayList<>();
+
        List<BotCommand> listOfCommands = new ArrayList();
        listOfCommands.add(new BotCommand("/start", "get a welcome message"));
-       listOfCommands.add(new BotCommand("/sign_up", "sign up"));
-       listOfCommands.add(new BotCommand("/sign_in", "sign in"));
-       listOfCommands.add(new BotCommand("/location", "request location"));
        listOfCommands.add(new BotCommand("/help", "show help message"));
-       listOfCommands.add(new BotCommand("/name_city", "name city"));
+       listOfCommands.add(new BotCommand("/weather", "name city"));
 
        try {
            this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
+           logger.info( "Create menu bot");
        } catch (TelegramApiException e){
-           log.error("Error setting bot commands", e.getMessage());
+           logger.log(Level.SEVERE, "Error setting bot commands", e.getMessage());
        }
-
    }
 
     @Override
@@ -61,30 +64,41 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            String message = update.getMessage().getText();
+        if (update.hasMessage()) {
             long chatId = update.getMessage().getChatId();
-
-            switch (message){
-                case "/start":
-                    startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
-                    break;
-                case "/help":
-                    sendMessage(chatId, HELP_MESSAGE);
-                    break;
-                case "/location":
-                     requestLocation(chatId);
-                     break;
-                case "/name_city":
-                    requestLocation(chatId);
-                    break;
-                default:
-                    handleCity( chatId,  message);
-                    sendMessage(chatId, "Sorry, command was not recognized");
+            if (update.getMessage().hasText()) {
+                String message = update.getMessage().getText();
+                switch (message){
+                    case "/start":
+                        startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+                        break;
+                    case "/help":
+                        sendMessage(chatId, HELP_MESSAGE);
+                        break;
+                    case "Send Location":
+                        requestLocationOrCity(chatId);
+                        break;
+                    case "Type City Name":
+                        sendMessage(chatId,"Please type the name of the city.");
+                        break;
+                    case "/weather":
+                        requestWeatherOptions(chatId);
+                        break;
+                    case "Current Weather":
+                        requestLocationOrCity(chatId);
+                        break;
+                    case "exit":
+                        requestWeatherOptions(chatId);
+                        break;
+                    default:
+                        getWeatherCity(chatId, message);
+                }
+            } else if(update.getMessage().hasLocation()) {
+                Location location = update.getMessage().getLocation();
+                handleLocation(location, chatId);
+            }else{
+                sendMessage(chatId, "Sorry, your message was not recognized. Please try again or type /help for assistance.");
             }
-        } else if(update.hasMessage() && update.getMessage().hasLocation()){
-            Location location = update.getMessage().getLocation();
-            handleLocation(location, update.getMessage().getChatId());
         }
     }
 
@@ -94,18 +108,23 @@ public class Bot extends TelegramLongPollingBot {
        Double longitude = location.getLongitude();
        SendMessage message = new SendMessage();
        message.setChatId(chatId);
-       message.setText("Additional coordinates:\nLatitude - " + latitude + ", Longitude - " + longitude);
 
        try {
+           var response = weatherRequestHandler.getWeatherDataCoordinatesNow(latitude,longitude);
+           String weather = response.weatherResponse();
+           message.setText(weather);
            execute(message);
+           logger.log(Level.INFO, "Send message to user {0}", chatId);
        } catch (TelegramApiException e) {
-           log.error("Error sending location", e);
+           logger.log(Level.SEVERE, "Error sending location", e.getMessage());
+       } catch (Exception e) {
+           throw new RuntimeException(e);
        }
     }
 
     private void startCommandReceived (long chatId, String name) {
         String response = "Hello " + name + ". I provide an opportunity to find out the weather anywhere in the world at any time.";
-        log.info("Replied to user. response: " + response + " chatId: " + chatId + " name: " + name);
+       // log.info("Replied to user. response: " + response + " chatId: " + chatId + " name: " + name);
         sendMessage(chatId, response);
     }
 
@@ -117,49 +136,100 @@ public class Bot extends TelegramLongPollingBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            log.error("Error sending message", e);
+            //log.error("Error sending message", e);
         }
     }
 
-    private void requestLocation(long chatId) {
+    private void requestLocationOrCity(long chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText("Please share your location with me.");
+        sendMessage.setText("How would you like to provide your location?");
 
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         keyboardMarkup.setResizeKeyboard(true);
         keyboardMarkup.setOneTimeKeyboard(true);
         List<KeyboardRow> keyboard = new ArrayList<>();
+
         KeyboardRow row = new KeyboardRow();
-        KeyboardButton button = new KeyboardButton();
-        button.setText("Send Location");
-        button.setRequestLocation(true);
-        row.add(button);
+
+        KeyboardButton buttonLocation = new KeyboardButton();
+        buttonLocation.setText("Send Location");
+        buttonLocation.setRequestLocation(true);
+        row.add(buttonLocation);
+
+        KeyboardButton buttonCity = new KeyboardButton();
+        buttonCity.setText("Type City Name");
+        row.add(buttonCity);
         keyboard.add(row);
+
+        row = new KeyboardRow();
+        KeyboardButton buttonExit= new KeyboardButton();
+        buttonExit.setText("exit");
+        row.add(buttonExit);
+        keyboard.add(row);
+
         keyboardMarkup.setKeyboard(keyboard);
         sendMessage.setReplyMarkup(keyboardMarkup);
 
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            log.error("Error requesting location", e);
+            // Обработка ошибок
         }
-
     }
-    private void handleCity(long chatId, String cityName) {
-        WeatherRequestHandler weatherRequestHandler =  new WeatherRequestHandler();
 
-
-        String answer = weatherRequestHandler.GetAnswerCityNowReturnString(cityName);
+    private void requestWeatherOptions(long chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText(answer);
+        sendMessage.setText("Please select the weather option:");
+
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setOneTimeKeyboard(true);
+        List<KeyboardRow> keyboard = new ArrayList<>();
+
+        // Создаем кнопки для выбора опций погоды
+        KeyboardRow row = new KeyboardRow();
+        KeyboardButton buttonCurrentWeather = new KeyboardButton();
+        buttonCurrentWeather.setText("Current Weather");
+        row.add(buttonCurrentWeather);
+        keyboard.add(row);
+
+        row = new KeyboardRow();
+        KeyboardButton buttonTomorrowWeather = new KeyboardButton();
+        buttonTomorrowWeather.setText("Tomorrow's Weather");
+        row.add(buttonTomorrowWeather);
+
+        KeyboardButton buttonNextThreeDaysWeather = new KeyboardButton();
+        buttonNextThreeDaysWeather.setText("Next Three Days Weather");
+        row.add(buttonNextThreeDaysWeather);
+        keyboard.add(row);
+
+        keyboardMarkup.setKeyboard(keyboard);
+        sendMessage.setReplyMarkup(keyboardMarkup);
 
         try {
             execute(sendMessage);
-            //ArrayList<WeatherData> arrayList = weatherRequestHandler.GetAnswerCityNDay(cityName,4);
         } catch (TelegramApiException e) {
-            log.error("Error requesting location", e);
+            // Handle exception
         }
+    }
+
+    private void getWeatherCity(long chatId, String cityName) {
+       WeatherRequestHandler weatherRequestHandler =  new WeatherRequestHandler(config);
+
+       String response  = weatherRequestHandler.getAnswerCityNowReturnString(cityName);
+       SendMessage sendMessage = new SendMessage();
+       sendMessage.setChatId(String.valueOf(chatId));
+       sendMessage.setText(response);
+
+       try {
+           execute(sendMessage);
+           ArrayList<WeatherData> arrayList = weatherRequestHandler.getResponseCityNDay(cityName,4);
+       } catch (TelegramApiException e) {
+           // log.error("Error requesting location", e);
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
     }
 }

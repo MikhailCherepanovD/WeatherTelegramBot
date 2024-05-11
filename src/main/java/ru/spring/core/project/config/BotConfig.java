@@ -11,11 +11,11 @@ public class BotConfig {
      private String botToken;
     @Value("${botConfig.name}")
      private String botName;//
-    @Value("${botConfig.openWeatherMapKey")
-     private String openWeatherMapKey;
+    @Value("${botConfig.apiKey}")
+     private String apiKey;
 
     public String getOpenWeatherMapKey() {
-        return openWeatherMapKey;
+        return apiKey;
     }
 
     public String getBotToken() {

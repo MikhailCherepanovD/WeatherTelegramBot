@@ -19,7 +19,6 @@ public class WeatherData {
     double latitude;
     double longitude;
 
-    //геттеры
     public String getCityName() {
         return cityName;
     }
@@ -65,7 +64,6 @@ public class WeatherData {
     public double getLongitude() { return longitude; }
 
 
-    //сеттеры
     public void setCityName(String cityName) {
         this.cityName = cityName;
     }
@@ -108,20 +106,21 @@ public class WeatherData {
     public void setLatitude(double latitude) { this.latitude = latitude; }
 
     public void setLongitude(double longitude) { this.longitude = longitude; }
-    public void print() {
-        System.out.println("Город: " + cityName);
-        System.out.println("Latitude: " + latitude);
-        System.out.println("Longitude: " + longitude);
-        System.out.println("Дата: " + date);
-        System.out.println("Время: " + time);
-        System.out.println("День недели: " + day);
-        System.out.println("Температура: " + temperature + "°C");
-        System.out.println("Скорость ветра: " + windSpeed + " м/с");
-        System.out.println("Влажность: " + humidity + "%");
-        System.out.println("Давление: " + pressure + " Паскалей");
-        System.out.println("Состояние погоды: " + weatherStateMain);
-        System.out.println("Описание погоды: " + weatherStateDescription);
-        System.out.println("\n\n");
+    public String weatherResponse() {
+        String response = "City: " + cityName
+                + "\n" + "Latitude: " + latitude
+                + "\n" + "Longitude: " + longitude
+                + "\n" + "Date: " + date
+                + "\n" + "Time: " + time
+                + "\n" + "Day: " + day
+                + "\n" + "Temperature: " + temperature
+                + "\n" + "Wind speed: " + windSpeed
+                + "\n" + "Humidity: " + humidity + "%"
+                + "\n" + "Pressure: " + pressure
+                + "\n" + "Weather conditions: " + weatherStateMain
+                + "\n" + "Description of the weather: " + weatherStateDescription;
+        return response;
     }
+
 
 }
