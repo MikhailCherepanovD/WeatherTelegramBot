@@ -15,7 +15,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.spring.core.project.config.BotConfig;
-import ru.spring.core.project.weatherCommunication.WeatherData;
 import ru.spring.core.project.weatherCommunication.WeatherRequestHandler;
 
 
@@ -30,15 +29,15 @@ import java.util.List;
 public class Bot extends TelegramLongPollingBot {
 
    private final BotConfig config;
-   private final WeatherRequestHandler weatherRequestHandler;
+   private WeatherRequestHandler weatherRequestHandler;
    static final String HELP_MESSAGE = "This bot идет нахуй потому что тут писать еще нечего";
-   private static final Logger logger = LoggerFactory.getLogger(Bot.class.getName());
+   private static final Logger logger = LoggerFactory.getLogger(Bot.class);
    private BotState currentState = BotState.START;
 
    public Bot(BotConfig config) {
        this.config = config;
        weatherRequestHandler = new WeatherRequestHandler(config);
-
+       logger.info("Bot initialized");
        List<BotCommand> listOfCommands = new ArrayList();
        listOfCommands.add(new BotCommand("/start", "get a welcome message"));
        listOfCommands.add(new BotCommand("/help", "show help message"));
@@ -56,8 +55,12 @@ public class Bot extends TelegramLongPollingBot {
         START,
         REQUEST_WEATHER_OPTION,
         REQUEST_LOCATION_OR_CITY,
+        REQUEST_FULL_WEATHER_FORECAST,
+        FULL_REQUEST_LOCATION_OR_CITY,
         REQUEST_LOCATION,
-        REQUEST_CITY
+        REQUEST_CITY,
+        FULL_REQUEST_LOCATION,
+        FULL_REQUEST_CITY
     }
 
     @Override
@@ -74,13 +77,18 @@ public class Bot extends TelegramLongPollingBot {
        return config.getOpenWeatherMapKey();
     }
 
+    private void changeBotState(BotState newState) {
+        logger.info("Bot state changed to {}", newState);
+        this.currentState = newState;
+    }
+
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
             long chatId = update.getMessage().getChatId();
             if (update.getMessage().hasText()) {
                 String message = update.getMessage().getText();
-                logger.info("User message: ", message, " Current bot state: ", currentState);
+                logger.info("Received update from user");
                 switch (currentState) {
                     case START:
                         switch (message) {
@@ -91,7 +99,7 @@ public class Bot extends TelegramLongPollingBot {
                                 sendMessage(chatId, HELP_MESSAGE);
                                 break;
                             case "/weather":
-                                currentState = BotState.REQUEST_WEATHER_OPTION;
+                                changeBotState(BotState.REQUEST_WEATHER_OPTION);
                                 requestWeatherOptions(chatId);
                                 break;
                             default:
@@ -101,10 +109,11 @@ public class Bot extends TelegramLongPollingBot {
                     case REQUEST_WEATHER_OPTION:
                         switch (message) {
                             case "Current Weather":
-                                currentState = BotState.REQUEST_LOCATION_OR_CITY;
+                                changeBotState(BotState.REQUEST_LOCATION_OR_CITY);
                                 requestLocationOrCity(chatId);
                                 break;
                             case "Full weather forecast":
+                                changeBotState(BotState.REQUEST_FULL_WEATHER_FORECAST);
                                 sendMessage(chatId, "You can find out the forecast for the \n /current_day_forecast \n /tomorrow_forecast \n /5_days_ahead");
                                 break;
                             default:
@@ -115,19 +124,51 @@ public class Bot extends TelegramLongPollingBot {
                     case REQUEST_LOCATION_OR_CITY:
                         switch (message) {
                             case "Send Location":
-                                currentState = BotState.REQUEST_LOCATION;
+                                changeBotState(BotState.REQUEST_LOCATION);
                                 requestLocationOrCity(chatId);
                                 break;
                             case "Type City Name":
-                                currentState = BotState.REQUEST_CITY;
+                                changeBotState(BotState.REQUEST_CITY);
                                 sendMessage(chatId, "Please type the name of the city.");
                                 break;
                             case "exit":
-                                currentState = BotState.REQUEST_WEATHER_OPTION;
+                                changeBotState(BotState.REQUEST_WEATHER_OPTION);
                                 requestWeatherOptions(chatId);
                                 break;
                             default:
-                                getWeatherCity(chatId, message);
+                                //getWeatherCity(chatId, message);
+                        }
+                        break;
+                    case REQUEST_FULL_WEATHER_FORECAST:
+                        switch (message){
+                            case "/current_day_forecast":
+                                changeBotState(BotState.FULL_REQUEST_LOCATION_OR_CITY);
+                                requestLocationOrCity(chatId);
+                                break;
+                            case "/tomorrow_forecast":
+                                break;
+                            case "/5_days_ahead":
+                                break;
+                            default:
+
+
+                        }
+                        break;
+                    case FULL_REQUEST_LOCATION_OR_CITY:
+                        switch (message){
+                            case "Send Location":
+                                changeBotState(BotState.FULL_REQUEST_LOCATION);
+                                requestLocationOrCity(chatId);
+                                break;
+                            case "Type City Name":
+                                changeBotState(BotState.FULL_REQUEST_CITY);
+                                sendMessage(chatId, "Please type the name of the city.");
+                                break;
+                            case "exit":
+                                changeBotState(BotState.REQUEST_WEATHER_OPTION);
+                                requestWeatherOptions(chatId);
+                                break;
+                            default:
                         }
                         break;
                     case REQUEST_LOCATION:
@@ -137,6 +178,17 @@ public class Bot extends TelegramLongPollingBot {
                     case REQUEST_CITY:
                         // Обработка сообщений в состоянии REQUEST_CITY
                         // Ваша логика для обработки введенного города
+                        break;
+                    case FULL_REQUEST_LOCATION:
+                        // Обработка сообщений в состоянии REQUEST_LOCATION
+                        // Ваша логика для обработки локации
+                        break;
+                    case FULL_REQUEST_CITY:
+                        try {
+                            getForecastCity(chatId, message);
+                        } catch (Exception e) {
+                            logger.error("Error getting forecast city", e);
+                        }
                         break;
                 }
             } else if(update.getMessage().hasLocation()) {
@@ -233,8 +285,9 @@ public class Bot extends TelegramLongPollingBot {
 
         try {
             execute(sendMessage);
+            logger.info("Message sent to user {}", chatId); // Добавляем лог об отправке сообщения пользователю
         } catch (TelegramApiException e) {
-            //log.error("Error sending message", e);
+            logger.error("Error sending message to user {}", chatId, e); // Логируем ошибку, если не удалось отправить сообщение
         }
     }
 
@@ -272,7 +325,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            // Обработка ошибок
+           logger.error("Error sending message to user {}", chatId, e);
         }
     }
 
@@ -304,25 +357,31 @@ public class Bot extends TelegramLongPollingBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            // Handle exception
+            logger.error("Error sending message to user {}", chatId, e);
         }
     }
 
     private void getWeatherCity(long chatId, String cityName) {
-       WeatherRequestHandler weatherRequestHandler =  new WeatherRequestHandler(config);
-
-       String response  = weatherRequestHandler.getAnswerCityNowReturnString(cityName);
+       String response = weatherRequestHandler.getAnswerCityNowReturnString(cityName);
        SendMessage sendMessage = new SendMessage();
        sendMessage.setChatId(String.valueOf(chatId));
        sendMessage.setText(response);
 
        try {
            execute(sendMessage);
-           ArrayList<WeatherData> arrayList = weatherRequestHandler.getResponseCityNDay(cityName,4);
+           //ArrayList<WeatherData> arrayList = weatherRequestHandler.getResponseCityNDay(cityName,4);
        } catch (TelegramApiException e) {
-           // log.error("Error requesting location", e);
+           logger.error("Error requesting location", e);
        } catch (Exception e) {
            throw new RuntimeException(e);
        }
+    }
+
+    private void getForecastCity(long chatId, String cityName) throws Exception {
+        var  response = weatherRequestHandler.getResponseCityNDay(cityName, 0);
+        System.out.println(response);
+//        SendMessage sendMessage = new SendMessage();
+//        sendMessage.setChatId(String.valueOf(chatId));
+
     }
 }

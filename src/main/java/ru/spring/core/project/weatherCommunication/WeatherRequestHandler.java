@@ -170,16 +170,32 @@ public class WeatherRequestHandler {
      *
      *
      * **/
-    public ArrayList<WeatherData> getResponseCityNDay(String cityName, int amountDays) throws Exception {
+    public String getResponseCityNDay(String cityName, int amountDays) throws Exception {
         try {
             FiveDayThreeHourStepForecastRequestCustomizer tempObject= openWeatherClient.forecast5Day3HourStep()
                     .byCityName(cityName);
-            ArrayList<WeatherData> response = getAnswerTempObjectNDay(tempObject,amountDays,cityName,0,0);
+            ArrayList<WeatherData> getData = getAnswerTempObjectNDay(tempObject,amountDays,cityName,0,0);
+
+            String response = formatWeatherForecast(getData, cityName);
             return response;
         } catch (Exception ex) {
             throw new Exception("Город не найден!", ex);
         }
-    };
+    }
+
+    private String formatWeatherForecast(ArrayList<WeatherData> forecastData, String cityName) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < forecastData.size(); i++) {
+            WeatherData weatherData = forecastData.get(i);
+            String forecast = String.format(" %s\nDate: %s\nTemperature: %.2f°C\nDescription: %s\n\n",
+                    i + 1,
+                    weatherData.getDate(),
+                    weatherData.getTemperature(),
+                    weatherData.getWeatherStateMain());
+            sb.append(forecast);
+        }
+        return sb.toString();
+    }
 
 
     // если передать 0 дней, выведет прогноз на остаток сегодняшнего дня
