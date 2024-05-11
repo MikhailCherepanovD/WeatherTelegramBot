@@ -78,7 +78,7 @@ public class Bot extends TelegramLongPollingBot {
                     requestLocation(chatId);
                     break;
                 default:
-
+                    handleCity( chatId,  message);
                     sendMessage(chatId, "Sorry, command was not recognized");
             }
         } else if(update.hasMessage() && update.getMessage().hasLocation()){
@@ -147,7 +147,7 @@ public class Bot extends TelegramLongPollingBot {
     }
     private void handleCity(long chatId, String cityName) {
         WeatherRequestHandler weatherRequestHandler =  new WeatherRequestHandler();
-        String answer = weatherRequestHandler.GetAnswerCityNow(cityName);
+        String answer = weatherRequestHandler.GetAnswerCityNowReturnString(cityName);
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
         sendMessage.setText(answer);
