@@ -107,19 +107,39 @@ public class WeatherData {
 
     public void setLongitude(double longitude) { this.longitude = longitude; }
     public String weatherResponse() {
-        String response = "City: " + cityName
-                + "\n" + "Latitude: " + latitude
-                + "\n" + "Longitude: " + longitude
-                + "\n" + "Date: " + date
-                + "\n" + "Time: " + time
-                + "\n" + "Day: " + day
-                + "\n" + "Temperature: " + temperature
-                + "\n" + "Wind speed: " + windSpeed
-                + "\n" + "Humidity: " + humidity + "%"
-                + "\n" + "Pressure: " + pressure
-                + "\n" + "Weather conditions: " + weatherStateMain
-                + "\n" + "Description of the weather: " + weatherStateDescription;
-        return response;
+
+        if(cityName == null){
+            String response = "City: -"
+                    + "\n" + "Latitude: " + latitude
+                    + "\n" + "Longitude: " + longitude
+                    + "\n" + "Date: " + date
+                    + "\n" + "Time: " + time
+                    + "\n" + "Day: " + day
+                    + "\n" + "Temperature: " + temperature
+                    + "\n" + "Wind speed: " + windSpeed
+                    + "\n" + "Humidity: " + humidity + "%"
+                    + "\n" + "Pressure: " + pressure
+                    + "\n" + "Weather conditions: " + weatherStateMain
+                    + "\n" + "Description of the weather: " + weatherStateDescription;
+            return response;
+        }else {
+            String response = "City: " + cityName
+                    + "\n" + "Latitude: " + latitude
+                    + "\n" + "Longitude: " + longitude
+                    + "\n" + "Date: " + date
+                    + "\n" + "Time: " + time
+                    + "\n" + "Day: " + day
+                    + "\n" + "Temperature: " + temperature
+                    + "\n" + "Wind speed: " + windSpeed
+                    + "\n" + "Humidity: " + humidity + "%"
+                    + "\n" + "Pressure: " + pressure
+                    + "\n" + "Weather conditions: " + weatherStateMain
+                    + "\n" + "Description of the weather: " + weatherStateDescription;
+            return response;
+        }
+
+
+
     }
 
 

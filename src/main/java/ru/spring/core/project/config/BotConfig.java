@@ -10,7 +10,7 @@ public class BotConfig {
     @Value("${botConfig.token}")
      private String botToken;
     @Value("${botConfig.name}")
-     private String botName;//
+     private String botName;
     @Value("${botConfig.apiKey}")
      private String apiKey;
 
