@@ -15,7 +15,9 @@ public class WeatherData {
     float humidity; // влажность
     float pressure;
     String weatherStateMain;// облачно, ясно, пасмурно ...
-    String weatherStateDiscription; // доп описание к этому
+    String weatherStateDescription; // доп описание к этому
+    double latitude;
+    double longitude;
 
     //геттеры
     public String getCityName() {
@@ -54,10 +56,13 @@ public class WeatherData {
         return weatherStateMain;
     }
 
-    public String getWeatherStateDiscription() {
-        return weatherStateDiscription;
+    public String getWeatherStateDescription() {
+        return weatherStateDescription;
     }
 
+    public double getLatitude() { return latitude; }
+
+    public double getLongitude() { return longitude; }
 
 
     //сеттеры
@@ -97,8 +102,26 @@ public class WeatherData {
         this.weatherStateMain = weatherStateMain;
     }
 
-    public void setWeatherStateDiscription(String weatherStateDiscription) {
-        this.weatherStateDiscription = weatherStateDiscription;
+    public void setWeatherStateDescription(String weatherStateDescription) {
+        this.weatherStateDescription = weatherStateDescription;
+    }
+    public void setLatitude(double latitude) { this.latitude = latitude; }
+
+    public void setLongitude(double longitude) { this.longitude = longitude; }
+    public void print() {
+        System.out.println("Город: " + cityName);
+        System.out.println("Latitude: " + latitude);
+        System.out.println("Longitude: " + longitude);
+        System.out.println("Дата: " + date);
+        System.out.println("Время: " + time);
+        System.out.println("День недели: " + day);
+        System.out.println("Температура: " + temperature + "°C");
+        System.out.println("Скорость ветра: " + windSpeed + " м/с");
+        System.out.println("Влажность: " + humidity + "%");
+        System.out.println("Давление: " + pressure + " Паскалей");
+        System.out.println("Состояние погоды: " + weatherStateMain);
+        System.out.println("Описание погоды: " + weatherStateDescription);
+        System.out.println("\n\n");
     }
 
 }

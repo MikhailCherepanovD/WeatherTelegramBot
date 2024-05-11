@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.spring.core.project.config.BotConfig;
+import ru.spring.core.project.weatherCommunication.WeatherData;
 import ru.spring.core.project.weatherCommunication.WeatherRequestHandler;
 
 import java.util.ArrayList;
@@ -147,12 +148,16 @@ public class Bot extends TelegramLongPollingBot {
     }
     private void handleCity(long chatId, String cityName) {
         WeatherRequestHandler weatherRequestHandler =  new WeatherRequestHandler();
+
+
         String answer = weatherRequestHandler.GetAnswerCityNowReturnString(cityName);
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
         sendMessage.setText(answer);
+
         try {
             execute(sendMessage);
+            //ArrayList<WeatherData> arrayList = weatherRequestHandler.GetAnswerCityNDay(cityName,4);
         } catch (TelegramApiException e) {
             log.error("Error requesting location", e);
         }
