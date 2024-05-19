@@ -108,6 +108,7 @@ public class Bot extends TelegramLongPollingBot {
                         startCommandHandler.accept(update);
                     } else {
                         sendMessage(chatId, "Unknown command. Type /help for assistance.");
+                        changeBotState(BotState.START);
                     }
                     break;
                 case MODE_SELECTION:
@@ -116,6 +117,7 @@ public class Bot extends TelegramLongPollingBot {
                         weatherCommandHandler.accept(update);
                     } else {
                         sendMessage(chatId, "Unknown command. Type /help for assistance.");
+                        changeBotState(BotState.START);
                     }
                     break;
                 case CURRENT_WEATHER_ENTER_CITY:
@@ -126,6 +128,7 @@ public class Bot extends TelegramLongPollingBot {
                         changeBotState(BotState.START);
                     }else{
                         sendMessage(chatId, "Unknown command. Type /help for assistance.");
+                        changeBotState(BotState.START);
                     }
                     break;
                 case AWAITING_CITY_NAME:
@@ -137,6 +140,7 @@ public class Bot extends TelegramLongPollingBot {
                         fullWeatherCommand.accept(update);
                     } else {
                         sendMessage(chatId, "Unknown command. Type /help for assistance.");
+                        changeBotState(BotState.START);
                     }
                     break;
                 case USER_ENTER_LOCATION_ONE:
@@ -156,6 +160,7 @@ public class Bot extends TelegramLongPollingBot {
                         changeBotState(BotState.START);
                     } catch (Exception e) {
                         logger.error("Problems getting a place {}", message);
+                        changeBotState(BotState.START);
                     }
                     break;
                 case USER_ENTER_LOCATION_TWO:
@@ -175,6 +180,7 @@ public class Bot extends TelegramLongPollingBot {
                         changeBotState(BotState.START);
                     } catch (Exception e) {
                         logger.error("Problems getting a place {}", message);
+                        changeBotState(BotState.START);
                     }
                     break;
                 case USER_ENTER_LOCATION_FIVE:
@@ -194,10 +200,12 @@ public class Bot extends TelegramLongPollingBot {
                         changeBotState(BotState.START);
                     } catch (Exception e) {
                         logger.error("Problems getting a place {}", message);
+                        changeBotState(BotState.START);
                     }
                     break;
                 default:
                     sendMessage(chatId, "Invalid state. Type /start to begin.");
+                    changeBotState(BotState.START);
                     break;
             }
         }else if (update.getMessage().hasLocation()) {
@@ -338,6 +346,7 @@ public class Bot extends TelegramLongPollingBot {
     private void helpCommandReceived(Update update) {
         long chatId = update.getMessage().getChatId();
         sendMessage(chatId, HELP_MESSAGE);
+        changeBotState(BotState.START);
     }
 
     private void startCommandReceived(Update update) {
@@ -345,6 +354,7 @@ public class Bot extends TelegramLongPollingBot {
         String response = "Hello " + update.getMessage().getFrom().getFirstName() + ". I provide an opportunity to find out the weather anywhere in the world at any time.";
         logger.info("Replied to user. response: " + response + " chatId: " + chatId + " name: " + update.getMessage().getFrom().getFirstName());
         sendMessage(chatId, response);
+        changeBotState(BotState.START);
     }
 
 //    private void handleCityNameForecastInput(Update update) {
