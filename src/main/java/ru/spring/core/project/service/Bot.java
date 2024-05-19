@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -41,24 +42,52 @@ public class Bot extends TelegramLongPollingBot {
     private BotState currentState = BotState.START;
     private ClassPathXmlApplicationContext context;
 
-
+    /**
+     * A map defining the transition actions for the start state.
+     * It maps user commands to their respective handlers when the bot is in the start state.
+     *
+     * The keys represent the user commands (e.g., "/start", "/help", "/weather").
+     * The values are method references that handle the respective commands.
+     */
     private final Map<String, Consumer<Update>> stateStartTransition = Map.of(
             "/start", this::startCommandReceived,
             "/help", this::helpCommandReceived,
             "/weather", this::handleWeatherCommand
     );
 
+    /**
+     * A map defining the transition actions for the weather state.
+     * It maps user choices to their respective handlers when the bot is in the weather state.
+     *
+     * The keys represent the user choices (e.g., "Current Weather", "Full Weather Forecast").
+     * The values are method references that handle the respective choices.
+     */
     private final Map<String, Consumer<Update>> weatherStateTransition = Map.of(
             "Current Weather", this::handleLocationOrCity,
             "Full Weather Forecast", this::handleFullWeatherForecast
     );
 
+    /**
+     * A map defining the transition actions for the forecasted mode.
+     * It maps user choices to their respective handlers when the bot is in the forecasted mode.
+     *
+     * The keys represent the user choices (e.g., "The weather forecast for the day", "The weather forecast for two days", "Five-day weather forecast", "Exit").
+     * The values are method references that handle the respective choices.
+     */
     private final Map<String, Consumer<Update>> handleForecastedMode = Map.of(
             "The weather forecast for the day", update -> handleForecastSelection(update, 0),
             "The weather forecast for two days", update -> handleForecastSelection(update, 1),
-            "Five-day weather forecast", update -> handleForecastSelection(update, 4)
+            "Five-day weather forecast", update -> handleForecastSelection(update, 4),
+            "Exit", this::handleExit
     );
 
+    /**
+     * A map defining the transition actions for location or city input.
+     * It maps user choices to their respective handlers when the bot prompts for location or city input.
+     *
+     * The keys represent the user choices (e.g., "Type City Name", "Send Location", "Exit").
+     * The values are method references that handle the respective choices.
+     */
     private final Map<String, Consumer<Update>> handleLocationOrCityAction = Map.of(
             "Type City Name", this::handleCityNameInput,
             "Send Location", this::handleLocationInput,
@@ -76,7 +105,7 @@ public class Bot extends TelegramLongPollingBot {
         List<BotCommand> listOfCommands = new ArrayList();
         listOfCommands.add(new BotCommand("/start", "get a welcome message"));
         listOfCommands.add(new BotCommand("/help", "show help message"));
-        listOfCommands.add(new BotCommand("/weather", "name city"));
+        listOfCommands.add(new BotCommand("/weather", "сhoosing a scenario option"));
         try {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
             logger.info("Create menu bot");
@@ -215,15 +244,32 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+    /**
+     * Exits the current state and updates the bot state to start.
+     * @param update The update received from Telegram API containing the user message.
+     */
     private void handleExit(Update update) {
         changeBotState(BotState.START);
     }
 
+    /**
+     * Changing the state of the bot after each step of the machine
+     * @param newState the state from the list of the automaton from the BotStates enumeration**/
     private void changeBotState(BotState newState) {
         logger.info("Bot state changed to {}", newState);
         this.currentState = newState;
     }
 
+    /**
+     * Handles a user's location and sends weather information to the specified chat.
+     *
+     * This method processes the received location data, extracts the latitude and longitude,
+     * and requests the current weather information for those coordinates. The weather information
+     * is then sent to the user via a Telegram message.
+     *
+     * @param location The Location object containing the latitude and longitude of the user's location.
+     * @param chatId The chat ID to which the weather information message will be sent.
+     */
     private void handleLocation(Location location, long chatId) {
         sendMessage(chatId, "We will start finding your city.");
         Double latitude = location.getLatitude();
@@ -236,7 +282,7 @@ public class Bot extends TelegramLongPollingBot {
             String weather = response.weatherResponse();
             message.setText(weather);
             execute(message);
-            logger.info("Send message to user {0}", chatId);
+            logger.info("Send message to user {}", chatId);
         } catch (TelegramApiException e) {
             logger.error("Error sending location", e.getMessage());
         } catch (Exception e) {
@@ -244,6 +290,11 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+    /**
+     * Sends a message to the user asking for city name input or location sharing for full weather forecast.
+     * Updates the bot state to user enter location for full weather forecast.
+     * @param update The update received from Telegram API containing the user message.
+     */
     private void handleFullWeatherForecast(Update update) {
         long chatId = update.getMessage().getChatId();
 
@@ -256,7 +307,6 @@ public class Bot extends TelegramLongPollingBot {
         keyboardMarkup.setOneTimeKeyboard(true);
         List<KeyboardRow> keyboard = new ArrayList<>();
 
-        // First row with "The weather forecast for the day"
         KeyboardRow row = new KeyboardRow();
         KeyboardButton buttonForecastDay = new KeyboardButton();
         buttonForecastDay.setText("The weather forecast for the day");
@@ -293,6 +343,12 @@ public class Bot extends TelegramLongPollingBot {
         changeBotState(BotState.FULL_WEATHER_FORECAST);
     }
 
+    /**
+     * Processes the user's forecast selection and retrieves the weather forecast for the specified number of days.
+     * Updates the bot state to start after processing.
+     * @param update The update received from Telegram API containing the user message.
+     * @param forecastDays The number of days for the weather forecast.
+     */
     private void handleForecastSelection(Update update, int forecastDays) {
         long chatId = update.getMessage().getChatId();
         SendMessage sendMessage = new SendMessage();
@@ -343,12 +399,20 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+    /**
+     * Sends a help message to the user with information on how to use the bot.
+     * @param update The update received from Telegram API containing the user message.
+     */
     private void helpCommandReceived(Update update) {
         long chatId = update.getMessage().getChatId();
         sendMessage(chatId, HELP_MESSAGE);
         changeBotState(BotState.START);
     }
 
+    /**
+     * Sends a welcome message to the user and updates the bot state to the mode selection.
+     * @param update The update received from Telegram API containing the user message.
+     */
     private void startCommandReceived(Update update) {
         long chatId = update.getMessage().getChatId();
         String response = "Hello " + update.getMessage().getFrom().getFirstName() + ". I provide an opportunity to find out the weather anywhere in the world at any time.";
@@ -386,6 +450,11 @@ public class Bot extends TelegramLongPollingBot {
 //    }
 
 
+    /**
+     * Processes the user's input for the city name and retrieves weather information.
+     * Updates the bot state to start after processing.
+     * @param update The update received from Telegram API containing the user message.
+     */
     private void handleCityNameInput(Update update) {
         long chatId = update.getMessage().getChatId();
         String cityName = update.getMessage().getText();
@@ -400,6 +469,16 @@ public class Bot extends TelegramLongPollingBot {
         changeBotState(BotState.MODE_SELECTION);
     }
 
+    /**
+     * Sends a formatted weather data message to the specified chat.
+
+     * This method takes a list of WeatherData objects and formats each entry into a string containing the date,
+     * time, temperature, and weather description. The formatted strings are then concatenated into a single message
+     * which is sent to the user via the Telegram API.
+
+     * @param chatId The chat ID to which the weather data message will be sent.
+     * @param weatherDataList An ArrayList of WeatherData objects containing weather information to be formatted and sent.
+     */
     private void sendWeatherData(long chatId, ArrayList<WeatherData> weatherDataList) {
         StringJoiner message = new StringJoiner("\n");
         for (WeatherData weatherData : weatherDataList) {
@@ -445,6 +524,11 @@ public class Bot extends TelegramLongPollingBot {
 //       }
 //    }
 
+    /**
+     * Processes the user's input for location sharing and retrieves weather information.
+     * Updates the bot state to start after processing.
+     * @param update The update received from Telegram API containing the user message.
+     */
     private void handleLocationInput(Update update){
         long chatId = update.getMessage().getChatId();
         Location location = update.getMessage().getLocation();
@@ -467,6 +551,11 @@ public class Bot extends TelegramLongPollingBot {
         changeBotState(BotState.START); // Вернуться в исходное состояние
     }
 
+    /**
+     * Sends a message to the user via the Telegram API.
+     * @param chatId The chat ID of the user.
+     * @param message The text message to be sent.
+     */
     public void sendMessage(long chatId, String message) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
@@ -480,6 +569,11 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+    /**
+     * Sends a message to the user asking for city name input or location sharing for weather information.
+     * Updates the bot state to location or city input state.
+     * @param update The update received from Telegram API containing the user message.
+     */
     private void handleLocationOrCity(Update update) {
         long chatId = update.getMessage().getChatId();
         SendMessage sendMessage = new SendMessage();
@@ -521,6 +615,10 @@ public class Bot extends TelegramLongPollingBot {
         changeBotState(BotState.CURRENT_WEATHER_ENTER_CITY);
     }
 
+    /**
+     * Sends a message to the user with options for weather information and updates the bot state to current weather enter city.
+     * @param update The update received from Telegram API containing the user message.
+     */
     private void handleWeatherCommand(Update update) {
         long chatId = update.getMessage().getChatId();
         SendMessage sendMessage = new SendMessage();
@@ -556,6 +654,10 @@ public class Bot extends TelegramLongPollingBot {
         changeBotState(BotState.MODE_SELECTION);
     }
 
+    /**
+     * Retrieves weather information based on the city name provided by the user.
+     * @param update The update received from Telegram API containing the user message.
+     */
     private void getWeatherCity(Update update) {
         long chatId = update.getMessage().getChatId();
         String cityName = update.getMessage().getText();
@@ -576,16 +678,34 @@ public class Bot extends TelegramLongPollingBot {
         changeBotState(BotState.START);
     }
 
+    /**
+     * Retrieves the weather forecast for the specified number of days based on the city name provided by the user.
+     * @param chatId The chat ID of the user.
+     * @param cityName The name of the city for which the weather forecast is to be retrieved.
+     * @param days The number of days for the weather forecast.
+     */
     private void getForecastCity(long chatId, String cityName, int days) throws Exception {
         ArrayList<WeatherData> response = weatherRequestHandler.getResponseCityNDay(cityName, days);
-        logger.info("Forecast data for city {}:", cityName);
+        logger.info("Weather forecast for the city {}:", cityName);
 
-        String message = "Forecast data for city " + cityName + ":\n";
-        for (WeatherData weatherData : response) {
-            message += "Date: " + weatherData.getDate() + "\n" +
-                    "Time: " + weatherData.getTime() +"\n" +
-                    "Temperature: " + weatherData.getTemperature() + "°C" +" \n" +
-                    "Description: " + weatherData.getWeatherStateMain() + "\n\n";
+
+        Map<String, List<WeatherData>> groupedByDate = response.stream()
+                .collect(Collectors.groupingBy(weatherData -> weatherData.getDate().toString()));
+
+
+        String message = "Weather forecast for the city " + cityName + ":\n";
+        for (Map.Entry<String, List<WeatherData>> entry : groupedByDate.entrySet()) {
+            String date = entry.getKey();
+            List<WeatherData> dailyForecast = entry.getValue();
+
+            message += "Date: " + date + "\n";
+            for (WeatherData weatherData : dailyForecast) {
+                message += "Time: " + weatherData.getTime() + "\n" +
+                        "Temperature: " + weatherData.getTemperature() + "°C\n" +
+                        "Description: " + weatherData.getWeatherStateMain() + "\n" +
+                        "Humidity: " + weatherData.getHumidity() + "%\n" +
+                        "Pressure: " + weatherData.getPressure() + " гПа\n\n";
+            }
         }
 
         SendMessage sendMessage = new SendMessage();
@@ -595,7 +715,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            logger.error("Error sending message to user {}", chatId, e);
+            logger.error("Error sending a message to the user {}", chatId, e);
         }
 
         changeBotState(BotState.START);
