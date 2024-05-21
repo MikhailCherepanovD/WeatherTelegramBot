@@ -8,8 +8,12 @@ import com.github.prominence.openweathermap.api.model.forecast.WeatherForecast;
 import com.github.prominence.openweathermap.api.model.weather.Weather;
 import com.github.prominence.openweathermap.api.request.forecast.free.FiveDayThreeHourStepForecastRequestCustomizer;
 import com.github.prominence.openweathermap.api.request.weather.single.SingleResultCurrentWeatherRequestCustomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.spring.core.project.config.BotConfig;
+import ru.spring.core.project.service.Bot;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,7 +26,9 @@ import java.util.List;
 public class WeatherRequestHandler {
     OpenWeatherMapClient openWeatherClient;
     private BotConfig config;
+    private static final Logger logger = LoggerFactory.getLogger(WeatherRequestHandler.class);
 
+    @Autowired
     public WeatherRequestHandler(BotConfig configuration){
         config = configuration;
         openWeatherClient = new OpenWeatherMapClient(config.getOpenWeatherMapKey());
@@ -31,21 +37,19 @@ public class WeatherRequestHandler {
 
     // этот метод оставил для теста
     private String parseWeatherReturnString(Weather parseWeather, String city){
-        String ans = city + "\n\n" +"Now:\n"+
+        return  city + "\n\n" +"Now:\n"+
                 Math.round(parseWeather.getTemperature().getValue())+"\n"
                 +parseWeather.getWeatherState()+"\n"
                 +parseWeather.getAtmosphericPressure()+"\n"
                 +parseWeather.getHumidity()+"\n";
-        return ans;
     };
     // этот метод оставил для теста
     String parseForecastReturnString(WeatherForecast parseWeather){
-        String ans=parseWeather.getForecastTimeISO()+"\n"
+        return parseWeather.getForecastTimeISO()+"\n"
                 +Math.round(parseWeather.getTemperature().getValue())+"\n"
                 +parseWeather.getWeatherState()+"\n"
                 +parseWeather.getAtmosphericPressure()+"\n"
                 +parseWeather.getHumidity()+"\n";
-        return ans;
     };
 
     // этот метод оставил для теста
@@ -106,6 +110,7 @@ public class WeatherRequestHandler {
             return getWeatherDataByTempObject(tempOdject,"",latitude,longitude);
         }
         catch (Exception ex) {
+            logger.error("Город не найден! {}: {}",latitude, longitude);
             throw new Exception("The place was not found!", ex);
         }
     };
@@ -138,7 +143,8 @@ public class WeatherRequestHandler {
             return ans;
         }
         catch (Exception ex) {
-            throw new Exception("Место не найдено!", ex);
+            logger.error("Город не найден! {}: {}",cityName, ex);
+            throw new Exception(ex);
         }
     };
 
@@ -170,32 +176,18 @@ public class WeatherRequestHandler {
      *
      *
      * **/
-    public String getResponseCityNDay(String cityName, int amountDays) throws Exception {
+    public ArrayList<WeatherData> getResponseCityNDay(String cityName, int amountDays) throws Exception {
         try {
-            FiveDayThreeHourStepForecastRequestCustomizer tempObject= openWeatherClient.forecast5Day3HourStep()
+            FiveDayThreeHourStepForecastRequestCustomizer tempObject = openWeatherClient.forecast5Day3HourStep()
                     .byCityName(cityName);
-            ArrayList<WeatherData> getData = getAnswerTempObjectNDay(tempObject,amountDays,cityName,0,0);
-
-            String response = formatWeatherForecast(getData, cityName);
+            ArrayList<WeatherData> response = getAnswerTempObjectNDay(tempObject,amountDays,cityName,0,0);
             return response;
         } catch (Exception ex) {
-            throw new Exception("Город не найден!", ex);
+            logger.error("Город не найден! {}: {}",cityName, ex);
+            throw new Exception(ex);
         }
     }
 
-    private String formatWeatherForecast(ArrayList<WeatherData> forecastData, String cityName) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < forecastData.size(); i++) {
-            WeatherData weatherData = forecastData.get(i);
-            String forecast = String.format(" %s\nDate: %s\nTemperature: %.2f°C\nDescription: %s\n\n",
-                    i + 1,
-                    weatherData.getDate(),
-                    weatherData.getTemperature(),
-                    weatherData.getWeatherStateMain());
-            sb.append(forecast);
-        }
-        return sb.toString();
-    }
 
 
     // если передать 0 дней, выведет прогноз на остаток сегодняшнего дня
@@ -209,7 +201,8 @@ public class WeatherRequestHandler {
             ArrayList<WeatherData> ans = getAnswerTempObjectNDay(tempObject,amountDays,"",latitude,longitude);
             return ans;
         } catch (Exception ex) {
-            throw new Exception("Город не найден!", ex);
+            logger.error("Город не найден! {}: {}",latitude, longitude);
+            throw new Exception(ex);
         }
     };
 
@@ -240,7 +233,8 @@ public class WeatherRequestHandler {
             }
             return listWeatherData;
         } catch (Exception ex) {
-            throw new Exception("Город не найден!", ex);
+            logger.error("Город не найден! {}: {}",cityName, ex);
+            throw new Exception(ex);
         }
     }
 
