@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.spring.core.project.config.BotConfig;
-import ru.spring.core.project.service.Bot;
+import ru.spring.core.project.entity.WeatherData;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -155,7 +155,7 @@ public class WeatherRequestHandler {
         weatherData.setCityName(cityName);
         weatherData.setDate(LocalDate.now());
         weatherData.setTime(LocalTime.now());
-        weatherData.setDay(LocalDate.now().getDayOfWeek());
+        weatherData.setDayOfWeek(LocalDate.now().getDayOfWeek());
         weatherData.setTemperature(Math.round((float)currentWeather.getTemperature().getValue()));
         weatherData.setHumidity((float)currentWeather.getHumidity().getValue());
         weatherData.setPressure((float)currentWeather.getAtmosphericPressure().getValue());
@@ -193,7 +193,7 @@ public class WeatherRequestHandler {
     // если передать 0 дней, выведет прогноз на остаток сегодняшнего дня
     // 1 день - на сегодня и на завтра
     // Максимом - 5 дней. Больше не умеет
-    public ArrayList<WeatherData> getAnswerCoordsNDay(double latitude, double longitude, int amountDays) throws Exception {
+    public  ArrayList<WeatherData> getAnswerCoordsNDay(double latitude, double longitude, int amountDays) throws Exception {
         try {
             Coordinate myCoordinate = Coordinate.of(latitude, longitude);
             FiveDayThreeHourStepForecastRequestCustomizer tempObject= openWeatherClient.forecast5Day3HourStep()
@@ -246,7 +246,7 @@ public class WeatherRequestHandler {
         weatherData.setCityName(cityName);
         weatherData.setDate(date);
         weatherData.setTime(time);
-        weatherData.setDay(date.getDayOfWeek());
+        weatherData.setDayOfWeek(date.getDayOfWeek());
         weatherData.setTemperature(Math.round((float)weatherForecast.getTemperature().getValue()));
         weatherData.setHumidity((float)weatherForecast.getHumidity().getValue());
         weatherData.setPressure((float)weatherForecast.getAtmosphericPressure().getValue()); // нужно перевести в мм рт ст

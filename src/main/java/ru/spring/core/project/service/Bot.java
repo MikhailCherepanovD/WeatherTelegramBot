@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.spring.core.project.config.BotConfig;
 import ru.spring.core.project.statemachine.BotState;
-import ru.spring.core.project.weatherCommunication.WeatherData;
+import ru.spring.core.project.entity.WeatherData;
 import ru.spring.core.project.weatherCommunication.WeatherRequestHandler;
 
 

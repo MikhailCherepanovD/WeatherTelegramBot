@@ -10,7 +10,10 @@ public class Main {
     public static void main(String[] args) throws TelegramApiException {
         Logger logger = LoggerFactory.getLogger(Main.class);
         logger.info("This is an info message.");
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
+        Test.test(context);
         context.getBean(BotInitializer.class).init();
+
+
     }
 }
