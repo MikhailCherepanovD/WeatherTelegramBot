@@ -1,7 +1,10 @@
 package ru.spring.core.project.entity;
 
 import jakarta.persistence.*;
+import ru.spring.core.project.weatherCommunication.CoordinateForWeatherBot;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,10 +17,7 @@ public class Place {
     @Column(name = "PLACE_NAME")
     private String placeName;
 
-    @Column(name = "LATITUDE")
-    float latitude;
-    @Column(name = "LONGITUDE")
-    float longitude;
+
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<WeatherData> setOfWeatherData;
@@ -25,7 +25,8 @@ public class Place {
     @ManyToMany(mappedBy = "setOfPlaces")
     private Set<User> setOfUser;
 
-
+    @Embedded
+    CoordinateForWeatherBot coordinate;
 
     public Set<User> getSetOfUser() {
         return setOfUser;
@@ -45,12 +46,13 @@ public class Place {
         return placeName;
     }
 
-    public float getLatitude() {
-        return latitude;
+
+    public CoordinateForWeatherBot getCoordinate() {
+        return coordinate;
     }
 
-    public float getLongitude() {
-        return longitude;
+    public void setCoordinate(CoordinateForWeatherBot coordinate) {
+        this.coordinate = coordinate;
     }
 
 
@@ -64,38 +66,50 @@ public class Place {
         this.placeName = placeName;
     }
 
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
-    }
 
-    public void setLongitude(float longitude) {
-        this.longitude = longitude;
-    }
     public Place(){
 
     }
+    public Place(String placeName){
+        this.placeName=placeName;
+    }
+    public Place(CoordinateForWeatherBot coordinateForWeatherBot){
+        this.coordinate=coordinateForWeatherBot;
+    }
 
+    @Override
+    public String toString() {
+        return "Place{" +
+                "id=" + id +
+                ", placeName='" + placeName + '\'' +
+                ", setOfWeatherData=" + setOfWeatherData +
+                ", setOfUser=" + setOfUser +
+                ", coordinate=" + coordinate +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Place place = (Place) o;
-        return Float.compare(latitude, place.latitude) == 0 && Float.compare(longitude, place.longitude) == 0 && id == place.id && Objects.equals(placeName, place.placeName);
+        return id == place.id && Objects.equals(placeName, place.placeName) && Objects.equals(setOfWeatherData, place.setOfWeatherData) && Objects.equals(setOfUser, place.setOfUser) && Objects.equals(coordinate, place.coordinate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(placeName, latitude, longitude, id);
+        return Objects.hash(id, placeName, setOfWeatherData, setOfUser, coordinate);
     }
 
-    @Override
-    public String toString() {
-        return "Place{" +
-                "placeName='" + placeName + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", id=" + id +
-                '}';
+
+    public void addWeatherData(List<WeatherData> listOfWeatherData){
+        if(setOfWeatherData==null)
+            setOfWeatherData=new HashSet<>();
+        setOfWeatherData.addAll(listOfWeatherData);
+    }
+    public void addWeatherData(WeatherData weatherData){
+        if(setOfWeatherData==null)
+            setOfWeatherData=new HashSet<>();
+        setOfWeatherData.add(weatherData);
     }
 }

@@ -2,6 +2,7 @@ package ru.spring.core.project.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ public class User {
     @Column(name = "CHAT_ID")
     private long chatId;
 
-    @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE , fetch = FetchType.LAZY)       //Merge - нужен для того чтобы уже сохраненные объекты не сохранялись заново, иначе ALL
     @JoinTable(
             name = "USER_PLACE",
             joinColumns = @JoinColumn(name = "USER_ID"),
@@ -59,6 +60,10 @@ public class User {
     public User(){
 
     }
+    public User(String userName,Long chatId){
+        this.userName=userName;
+        this.chatId=chatId;
+    }
 
 
     @Override
@@ -81,5 +86,10 @@ public class User {
                 ", userName='" + userName + '\'' +
                 ", chatId='" + chatId + '\'' +
                 '}';
+    }
+    public void addNewPlace(Place place){
+        if(setOfPlaces==null)
+            setOfPlaces= new HashSet<>();
+        setOfPlaces.add(place);
     }
 }

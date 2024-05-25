@@ -12,8 +12,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "WEATHER_DATA")
 public class WeatherData {
-    double latitude;
-    double longitude;
+/*
+    double latitude; // удалить
+    double longitude; //удалить
     String cityName; // надо будет удалить
     public void setLatitude(double latitude) { this.latitude = latitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }
@@ -26,6 +27,7 @@ public class WeatherData {
     public String getCityName() {
         return cityName;
     }
+*/
 
 
     @Id
@@ -193,39 +195,18 @@ public class WeatherData {
         this.weatherStateDescription = weatherStateDescription;
     }
     public String weatherResponse() {
-
-        if(cityName == null){
-            String response = "City: -"
-                    + "\n" + "Latitude: " + latitude
-                    + "\n" + "Longitude: " + longitude
-                    + "\n" + "Date: " + date
-                    + "\n" + "Time: " + time
-                    + "\n" + "Day: " + dayOfWeek
-                    + "\n" + "Temperature: " + temperature
-                    + "\n" + "Wind speed: " + windSpeed
-                    + "\n" + "Humidity: " + humidity + "%"
-                    + "\n" + "Pressure: " + pressure
-                    + "\n" + "Weather conditions: " + weatherStateMain
-                    + "\n" + "Description of the weather: " + weatherStateDescription;
-            return response;
-        }else {
-            String response = "City: " + cityName
-                    + "\n" + "Latitude: " + latitude
-                    + "\n" + "Longitude: " + longitude
-                    + "\n" + "Date: " + date
-                    + "\n" + "Time: " + time
-                    + "\n" + "Day: " + dayOfWeek
-                    + "\n" + "Temperature: " + temperature
-                    + "\n" + "Wind speed: " + windSpeed
-                    + "\n" + "Humidity: " + humidity + "%"
-                    + "\n" + "Pressure: " + pressure
-                    + "\n" + "Weather conditions: " + weatherStateMain
-                    + "\n" + "Description of the weather: " + weatherStateDescription;
-            return response;
-        }
-
-
-
+        String response =
+                "\n" + "Time of load: " + timeOfLoad+
+                 "\n" + "Date: " + date
+                + "\n" + "Time: " + time
+                + "\n" + "Day: " + dayOfWeek
+                + "\n" + "Temperature: " + temperature
+                + "\n" + "Wind speed: " + windSpeed
+                + "\n" + "Humidity: " + humidity + "%"
+                + "\n" + "Pressure: " + pressure
+                + "\n" + "Weather conditions: " + weatherStateMain
+                + "\n" + "Description of the weather: " + weatherStateDescription;
+        return response;
     }
 
 

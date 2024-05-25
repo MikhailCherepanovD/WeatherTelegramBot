@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class Bot extends TelegramLongPollingBot {
+
     @Autowired
     private final BotConfig config;
     @Autowired
@@ -271,6 +272,10 @@ public class Bot extends TelegramLongPollingBot {
      * @param chatId The chat ID to which the weather information message will be sent.
      */
     private void handleLocation(Location location, long chatId) {
+
+
+  /*
+
         sendMessage(chatId, "We will start finding your city.");
         Double latitude = location.getLatitude();
         Double longitude = location.getLongitude();
@@ -288,6 +293,12 @@ public class Bot extends TelegramLongPollingBot {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        */
+
+
+
+
     }
 
     /**
@@ -459,7 +470,7 @@ public class Bot extends TelegramLongPollingBot {
         long chatId = update.getMessage().getChatId();
         String cityName = update.getMessage().getText();
         try {
-            ArrayList<WeatherData> weatherData = weatherRequestHandler.getResponseCityNDay(cityName, 0);
+            ArrayList<WeatherData> weatherData = weatherRequestHandler.getWeatherDataByCityNameNDay(cityName, 0);
             sendWeatherData(chatId, weatherData);
         } catch (Exception e) {
             sendMessage(chatId, "Error occurred while processing your request.");
@@ -530,6 +541,8 @@ public class Bot extends TelegramLongPollingBot {
      * @param update The update received from Telegram API containing the user message.
      */
     private void handleLocationInput(Update update){
+        /*
+
         long chatId = update.getMessage().getChatId();
         Location location = update.getMessage().getLocation();
         if (location == null) {
@@ -549,6 +562,9 @@ public class Bot extends TelegramLongPollingBot {
         sendWeatherData(chatId, weatherData);
 
         changeBotState(BotState.START); // Вернуться в исходное состояние
+
+       */
+
     }
 
     /**
@@ -685,7 +701,7 @@ public class Bot extends TelegramLongPollingBot {
      * @param days The number of days for the weather forecast.
      */
     private void getForecastCity(long chatId, String cityName, int days) throws Exception {
-        ArrayList<WeatherData> response = weatherRequestHandler.getResponseCityNDay(cityName, days);
+        ArrayList<WeatherData> response = weatherRequestHandler.getWeatherDataByCityNameNDay(cityName, days);
         logger.info("Weather forecast for the city {}:", cityName);
 
 
@@ -720,4 +736,5 @@ public class Bot extends TelegramLongPollingBot {
 
         changeBotState(BotState.START);
     }
+
 }

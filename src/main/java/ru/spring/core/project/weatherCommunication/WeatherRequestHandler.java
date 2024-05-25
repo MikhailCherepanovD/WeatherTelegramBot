@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import ru.spring.core.project.config.BotConfig;
 import ru.spring.core.project.entity.WeatherData;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -33,7 +34,7 @@ public class WeatherRequestHandler {
         config = configuration;
         openWeatherClient = new OpenWeatherMapClient(config.getOpenWeatherMapKey());
     }
-    String GetAnswerCoord(){return "";};
+
 
     // этот метод оставил для теста
     private String parseWeatherReturnString(Weather parseWeather, String city){
@@ -100,14 +101,17 @@ public class WeatherRequestHandler {
     };
 
     //Нужные методы:
-    public WeatherData getWeatherDataCoordinatesNow(double latitude, double longitude)throws Exception {
+    public WeatherData getWeatherDataByCoordinatesNow(CoordinateForWeatherBot coordinateForWeatherBot)throws Exception {
+        double latitude=coordinateForWeatherBot.getLatitude();
+        double longitude = coordinateForWeatherBot.getLatitude();
         try {
+
             Coordinate myCoordinate = Coordinate.of(latitude, longitude);
             SingleResultCurrentWeatherRequestCustomizer tempOdject = openWeatherClient
                     .currentWeather()
                     .single()
                     .byCoordinate(myCoordinate);
-            return getWeatherDataByTempObject(tempOdject,"",latitude,longitude);
+            return getWeatherDataByTempObjectNow(tempOdject,"",latitude,longitude);
         }
         catch (Exception ex) {
             logger.error("Город не найден! {}: {}",latitude, longitude);
@@ -115,15 +119,16 @@ public class WeatherRequestHandler {
         }
     };
 
-    public WeatherData getWeatherDataCityNow(String cityName)throws Exception {
+    public WeatherData getWeatherDataByCityNameNow(String cityName)throws Exception {
         try {
             SingleResultCurrentWeatherRequestCustomizer tempOdject = openWeatherClient
                     .currentWeather()
                     .single()
                     .byCityName(cityName);
 
-
-            return getWeatherDataByTempObject(tempOdject,cityName,0,0);
+            WeatherData ans = getWeatherDataByTempObjectNow(tempOdject,cityName,0,0);
+            ans.setTimeOfLoad(new Timestamp(System.currentTimeMillis()));
+            return ans;
         }
         catch (Exception ex) {
             throw new Exception("Город не найден!", ex);
@@ -131,8 +136,8 @@ public class WeatherRequestHandler {
     };
 
 
-    public WeatherData getWeatherDataByTempObject(SingleResultCurrentWeatherRequestCustomizer tempOdject,
-                                           String cityName, double latitude, double longitude)throws Exception {
+    private WeatherData getWeatherDataByTempObjectNow(SingleResultCurrentWeatherRequestCustomizer tempOdject,
+                                                     String cityName, double latitude, double longitude)throws Exception {
         try {
             Weather currentWeather = tempOdject
                     .language(Language.RUSSIAN)
@@ -140,6 +145,9 @@ public class WeatherRequestHandler {
                     .retrieve()
                     .asJava();
             WeatherData ans = parseWeather(currentWeather, cityName, latitude, longitude);
+
+            ans.setTimeOfLoad(new Timestamp(System.currentTimeMillis()));
+
             return ans;
         }
         catch (Exception ex) {
@@ -150,9 +158,6 @@ public class WeatherRequestHandler {
 
     private WeatherData parseWeather(Weather currentWeather, String cityName, double latitude, double longitude) {
         WeatherData weatherData= new WeatherData();
-        weatherData.setLatitude(latitude);
-        weatherData.setLongitude(longitude);
-        weatherData.setCityName(cityName);
         weatherData.setDate(LocalDate.now());
         weatherData.setTime(LocalTime.now());
         weatherData.setDayOfWeek(LocalDate.now().getDayOfWeek());
@@ -176,11 +181,14 @@ public class WeatherRequestHandler {
      *
      *
      * **/
-    public ArrayList<WeatherData> getResponseCityNDay(String cityName, int amountDays) throws Exception {
+    public ArrayList<WeatherData> getWeatherDataByCityNameNDay(String cityName, int amountDays) throws Exception {
         try {
             FiveDayThreeHourStepForecastRequestCustomizer tempObject = openWeatherClient.forecast5Day3HourStep()
                     .byCityName(cityName);
-            ArrayList<WeatherData> response = getAnswerTempObjectNDay(tempObject,amountDays,cityName,0,0);
+            ArrayList<WeatherData> response = getWeatherDataByTempObjectNDay(tempObject,amountDays,cityName,0,0);
+            for(WeatherData wd:response){
+                wd.setTimeOfLoad(new Timestamp(System.currentTimeMillis()));
+            }
             return response;
         } catch (Exception ex) {
             logger.error("Город не найден! {}: {}",cityName, ex);
@@ -193,12 +201,17 @@ public class WeatherRequestHandler {
     // если передать 0 дней, выведет прогноз на остаток сегодняшнего дня
     // 1 день - на сегодня и на завтра
     // Максимом - 5 дней. Больше не умеет
-    public  ArrayList<WeatherData> getAnswerCoordsNDay(double latitude, double longitude, int amountDays) throws Exception {
+    public  ArrayList<WeatherData> getWeatherDataByCoordsNDay(CoordinateForWeatherBot coordinateForWeatherBot, int amountDays) throws Exception {
+        double latitude = coordinateForWeatherBot.getLatitude();
+        double longitude = coordinateForWeatherBot.getLongitude();
         try {
             Coordinate myCoordinate = Coordinate.of(latitude, longitude);
             FiveDayThreeHourStepForecastRequestCustomizer tempObject= openWeatherClient.forecast5Day3HourStep()
                     .byCoordinate(myCoordinate);
-            ArrayList<WeatherData> ans = getAnswerTempObjectNDay(tempObject,amountDays,"",latitude,longitude);
+            ArrayList<WeatherData> ans = getWeatherDataByTempObjectNDay(tempObject,amountDays,"",latitude,longitude);
+            for(WeatherData wd:ans){
+                wd.setTimeOfLoad(new Timestamp(System.currentTimeMillis()));
+            }
             return ans;
         } catch (Exception ex) {
             logger.error("Город не найден! {}: {}",latitude, longitude);
@@ -206,8 +219,8 @@ public class WeatherRequestHandler {
         }
     };
 
-     ArrayList<WeatherData> getAnswerTempObjectNDay(FiveDayThreeHourStepForecastRequestCustomizer tempObject,
-                                                          int amountDays , String cityName, double latitude, double longitude) throws Exception {
+     private ArrayList<WeatherData> getWeatherDataByTempObjectNDay(FiveDayThreeHourStepForecastRequestCustomizer tempObject,
+                                                           int amountDays , String cityName, double latitude, double longitude) throws Exception {
         try {
 
             List<WeatherForecast> listForecast = tempObject.language(Language.RUSSIAN)
@@ -224,6 +237,7 @@ public class WeatherRequestHandler {
                 LocalDateTime localDateTime = LocalDateTime.parse(listForecast.get(i).getForecastTimeISO(), formatter);
                 LocalDate date = localDateTime.toLocalDate();
                 LocalTime time = localDateTime.toLocalTime();
+
                 if (!date.isBefore(currentDate.plusDays(amountDays+1))) {
                     break;
                 }
@@ -231,6 +245,7 @@ public class WeatherRequestHandler {
 
 
             }
+
             return listWeatherData;
         } catch (Exception ex) {
             logger.error("Город не найден! {}: {}",cityName, ex);
@@ -241,9 +256,6 @@ public class WeatherRequestHandler {
     WeatherData parseForecast(WeatherForecast weatherForecast, String cityName,LocalDate date,LocalTime time,
                               double latitude, double longitude){
         WeatherData weatherData= new WeatherData();
-        weatherData.setLatitude(latitude);
-        weatherData.setLongitude(longitude);
-        weatherData.setCityName(cityName);
         weatherData.setDate(date);
         weatherData.setTime(time);
         weatherData.setDayOfWeek(date.getDayOfWeek());
@@ -255,4 +267,13 @@ public class WeatherRequestHandler {
         weatherData.setWeatherStateDescription(weatherForecast.getWeatherState().getDescription());
         return weatherData;
     }
+
+
+
+
+
+
+    ///////////////////////////////////////////////////////////// Остануться только эти методы
+
+
 }

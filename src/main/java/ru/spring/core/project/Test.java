@@ -19,13 +19,11 @@ public class Test {
 
         Place placeSPB =new Place();
         placeSPB.setPlaceName("Piter");
-        placeSPB.setLongitude(12);
-        placeSPB.setLongitude(13);
+
 
         Place placeChelyabinsk =new Place();
         placeChelyabinsk.setPlaceName("Chelyba");
-        placeChelyabinsk.setLongitude(1);
-        placeChelyabinsk.setLongitude(1);
+
 
 
 
