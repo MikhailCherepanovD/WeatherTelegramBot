@@ -5,27 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6ed9d13b-f1fb-452d-bf38-2e32284bd08a" name="Changes" comment="Add first logic DB">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/PlaceService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/WeatherDataService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/PlaceServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/UserServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/WeatherDataImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/weatherCommunication/CoordinateForWeatherBot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/file:/home/mikhail/Разработка/6_sem/java/Weather-Bot/src/main/resources/logs/your_log_file.log" beforeDir="false" afterPath="$PROJECT_DIR$/file:/home/mikhail/Разработка/6_sem/java/Weather-Bot/src/main/resources/logs/your_log_file.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/BLusingBD/RequesterDataFromDBorOpenWeatherMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/BLusingBD/RequesterDataFromDBOrOpenWeatherMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/config/LoggingConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/config/LoggingConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/Place.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/Place.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/WeatherData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/WeatherData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/repositories/PlaceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/repositories/PlaceRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/repositories/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/repositories/WeatherDataRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/repositories/WeatherDataRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/Client.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/weatherCommunication/WeatherRequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/weatherCommunication/WeatherRequestHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/applicationContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/applicationContext.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java" afterDir="false" />
     </list>
@@ -76,7 +57,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "addBdCherep",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/mikhail/Разработка/6_sem/java/Lab3GrammarMaven",
+    "last_opened_file_path": "/home/mikhail/Разработка/Летняя_практика3курс/JavaLegacy",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
@@ -86,7 +67,7 @@
       <recent name="$PROJECT_DIR$/src/main/resources/META-INF" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.test.testRequesterDataFromDBOrOpenWeatherMap">
+  <component name="RunManager" selected="JUnit.test.testUsingRepositories">
     <configuration name="test.testDBService" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="WatherBot" />
       <extension name="coverage">
@@ -169,10 +150,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.test.testUsingRepositories" />
         <item itemvalue="JUnit.test.testRequesterDataFromDBOrOpenWeatherMap" />
         <item itemvalue="JUnit.test.testGettingFromDB" />
         <item itemvalue="JUnit.test.testWeatherRequestHandler" />
-        <item itemvalue="JUnit.test.testUsingRepositories" />
         <item itemvalue="JUnit.test.testDBService" />
       </list>
     </recent_temporary>
@@ -235,7 +216,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java</url>
-          <line>232</line>
+          <line>234</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>

@@ -43,6 +43,8 @@ public class test {
         User userCherep = new User();
         userCherep.setUserName("Cherep");
         userRepository.save(userCherep);
+        userRepository.save(userCherep);
+        userRepository.save(userCherep);
 
 
         Place placeSPB =new Place();
