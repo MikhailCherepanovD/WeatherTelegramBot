@@ -50,7 +50,9 @@ public class Bot extends TelegramLongPollingBot {
      * The keys represent the user commands (e.g., "/start", "/help", "/weather").
      * The values are method references that handle the respective commands.
      */
+    //сравниваются введенные сообщения
     private final Map<String, Consumer<Update>> stateStartTransition = Map.of(
+
             "/start", this::startCommandReceived,
             "/help", this::helpCommandReceived,
             "/weather", this::handleWeatherCommand
@@ -98,13 +100,16 @@ public class Bot extends TelegramLongPollingBot {
 
 
     @Autowired
+
+
+    // указываются сообщения в левом меню
     public Bot(ClassPathXmlApplicationContext context) {
         this.config = context.getBean(BotConfig.class);
         this.context = context;
 
         weatherRequestHandler = context.getBean(WeatherRequestHandler.class);// = new WeatherRequestHandler(config);
         List<BotCommand> listOfCommands = new ArrayList();
-        listOfCommands.add(new BotCommand("/start", "get a welcome message"));
+        listOfCommands.add(new BotCommand("/start1", "get a welcome message"));
         listOfCommands.add(new BotCommand("/help", "show help message"));
         listOfCommands.add(new BotCommand("/weather", "сhoosing a scenario option"));
         try {

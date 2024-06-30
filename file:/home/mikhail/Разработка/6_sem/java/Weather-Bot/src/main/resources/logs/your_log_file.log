@@ -3883,3 +3883,15 @@ org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException: Error exe
 23:51:02.587 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
 23:51:31.500 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
 14:29:11.073 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+18:00:27.259 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+18:00:41.129 [main] INFO  ru.spring.core.project.Main - This is an info message.
+18:00:44.846 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+18:00:50.171 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Replied to user. response: Hello Mikhail. I provide an opportunity to find out the weather anywhere in the world at any time. chatId: 1326716327 name: Mikhail
+18:00:50.306 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+18:00:50.308 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to START
+18:00:59.147 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to MODE_SELECTION
+18:01:02.305 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to CURRENT_WEATHER_ENTER_CITY
+18:01:05.368 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+18:01:05.368 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to AWAITING_CITY_NAME
+18:02:20.664 [main] INFO  ru.spring.core.project.Main - This is an info message.
+18:02:25.006 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot

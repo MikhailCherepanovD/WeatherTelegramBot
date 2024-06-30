@@ -62,8 +62,9 @@
       <recent name="$PROJECT_DIR$/src/main/resources/META-INF" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.test.testUsingRepositories">
-    <configuration name="test.testDBService" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ru.spring.core.project.Main" />
       <module name="WatherBot" />
       <extension name="coverage">
         <pattern>
@@ -71,10 +72,6 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="ru.spring.core.project" />
-      <option name="MAIN_CLASS_NAME" value="ru.spring.core.project.test" />
-      <option name="METHOD_NAME" value="testDBService" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -145,11 +142,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.test.testUsingRepositories" />
         <item itemvalue="JUnit.test.testRequesterDataFromDBOrOpenWeatherMap" />
         <item itemvalue="JUnit.test.testGettingFromDB" />
         <item itemvalue="JUnit.test.testWeatherRequestHandler" />
-        <item itemvalue="JUnit.test.testDBService" />
       </list>
     </recent_temporary>
   </component>
