@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ed9d13b-f1fb-452d-bf38-2e32284bd08a" name="Changes" comment="Add first logic DB" />
+    <list default="true" id="6ed9d13b-f1fb-452d-bf38-2e32284bd08a" name="Changes" comment="Add first logic DB">
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/WeatherHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file:/home/mikhail/Разработка/6_sem/java/Weather-Bot/src/main/resources/logs/your_log_file.log" beforeDir="false" afterPath="$PROJECT_DIR$/file:/home/mikhail/Разработка/6_sem/java/Weather-Bot/src/main/resources/logs/your_log_file.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/repositories/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/Bot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,25 +47,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.test.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.test.testDBService.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.test.testFunction1.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.test.testGettingFromDB.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.test.testRequesterDataFromDBOrOpenWeatherMap.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.test.testUsingRepositories.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.test.testWeatherRequestHandler.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;addBdCherep&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/mikhail/Разработка/Летняя_практика3курс/JavaLegacy&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "JUnit.test.addSameIdPlace.executor": "Debug",
+    "JUnit.test.executor": "Run",
+    "JUnit.test.testDBService.executor": "Run",
+    "JUnit.test.testFunction1.executor": "Run",
+    "JUnit.test.testGettingFromDB.executor": "Run",
+    "JUnit.test.testRequesterDataFromDBOrOpenWeatherMap.executor": "Run",
+    "JUnit.test.testUsingRepositories.executor": "Run",
+    "JUnit.test.testWeatherRequestHandler.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "addBdCherep",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/mikhail/Разработка/Летняя_практика3курс/JavaLegacy",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources/META-INF" />
@@ -72,6 +82,22 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="test.addSameIdPlace" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="WatherBot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.spring.core.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.spring.core.project" />
+      <option name="MAIN_CLASS_NAME" value="ru.spring.core.project.test" />
+      <option name="METHOD_NAME" value="addSameIdPlace" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -124,29 +150,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="test.testWeatherRequestHandler" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="WatherBot" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ru.spring.core.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ru.spring.core.project" />
-      <option name="MAIN_CLASS_NAME" value="ru.spring.core.project.test" />
-      <option name="METHOD_NAME" value="testWeatherRequestHandler" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.test.addSameIdPlace" />
         <item itemvalue="JUnit.test.testUsingRepositories" />
         <item itemvalue="JUnit.test.testRequesterDataFromDBOrOpenWeatherMap" />
         <item itemvalue="JUnit.test.testGettingFromDB" />
-        <item itemvalue="JUnit.test.testWeatherRequestHandler" />
       </list>
     </recent_temporary>
   </component>
@@ -210,6 +220,11 @@
           <url>file://$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java</url>
           <line>234</line>
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/Bot.java</url>
+          <line>125</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

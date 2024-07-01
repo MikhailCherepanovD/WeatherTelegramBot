@@ -3895,3 +3895,59 @@ org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException: Error exe
 18:01:05.368 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to AWAITING_CITY_NAME
 18:02:20.664 [main] INFO  ru.spring.core.project.Main - This is an info message.
 18:02:25.006 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+18:11:42.916 [main] INFO  ru.spring.core.project.Main - This is an info message.
+18:11:46.445 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+18:11:55.410 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+18:11:55.412 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to START
+18:12:07.184 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+18:12:07.185 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to START
+18:12:29.502 [main] INFO  ru.spring.core.project.Main - This is an info message.
+18:12:33.727 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+18:12:42.376 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Replied to user. response: Hello Mikhail. I provide an opportunity to find out the weather anywhere in the world at any time. chatId: 1326716327 name: Mikhail
+18:12:42.533 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+18:12:42.535 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to START
+18:12:46.354 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to MODE_SELECTION
+18:12:50.098 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+18:12:50.098 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to START
+18:12:52.540 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+18:12:52.541 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to START
+18:13:14.975 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+18:13:14.975 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to START
+18:13:17.294 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to MODE_SELECTION
+18:13:20.557 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+18:13:20.557 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to START
+18:13:29.846 [main] INFO  ru.spring.core.project.Main - This is an info message.
+18:13:33.867 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+18:13:41.835 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Replied to user. response: Hello Mikhail. I provide an opportunity to find out the weather anywhere in the world at any time. chatId: 1326716327 name: Mikhail
+18:13:41.906 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+18:13:41.908 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to START
+18:13:45.409 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to MODE_SELECTION
+18:13:48.581 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to CURRENT_WEATHER_ENTER_CITY
+18:13:54.016 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+18:13:54.016 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to AWAITING_CITY_NAME
+18:26:34.533 [main] INFO  ru.spring.core.project.Main - This is an info message.
+18:26:38.383 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+19:08:26.317 [main] INFO  ru.spring.core.project.Main - This is an info message.
+19:08:30.303 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+19:08:40.651 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+19:08:43.435 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+19:08:45.294 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+19:08:47.494 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+19:08:49.343 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+19:09:42.331 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+19:09:42.331 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Bot state changed to START
+19:09:45.634 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327
+19:20:58.468 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+19:49:15.649 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+19:50:49.903 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+19:51:53.818 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+19:54:18.931 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+20:07:31.149 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+20:13:24.447 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+20:15:45.328 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+20:20:04.449 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+22:07:50.393 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+22:08:30.970 [main] INFO  ru.spring.core.project.Main - This is an info message.
+22:08:35.790 [main] INFO  ru.spring.core.project.service.Bot - Create menu bot
+22:09:32.046 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Replied to user. response: Hello Mikhail. I provide an opportunity to find out the weather anywhere in the world at any time. chatId: 1326716327 name: Mikhail
+22:09:32.167 [killBonJoviWeatherBot Telegram Executor] INFO  ru.spring.core.project.service.Bot - Message sent to user 1326716327

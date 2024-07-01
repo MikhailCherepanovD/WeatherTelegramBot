@@ -14,7 +14,11 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public User addUser(User user){
+    public User addUserIfNotExistByChatId(User user){
+        List<User> users = getUsersByChatId(user.getChatId());
+        if(!users.isEmpty()){
+            return users.get(0);
+        }
         User savedUser =userRepository.saveAndFlush(user);
         return savedUser;
     }

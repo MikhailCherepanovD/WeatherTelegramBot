@@ -119,7 +119,7 @@ public class test {
         RequesterDataFromDBOrOpenWeatherMap requesterDataFromDBOrOpenWeatherMap = context.getBean(RequesterDataFromDBOrOpenWeatherMap.class);
 
         User userKevGen = new User("KevGen",1L);
-        userService.addUser(userKevGen);
+        userService.addUserIfNotExistByChatId(userKevGen);
 
         User userCherep = new User("Cherep",2L);
 
@@ -135,14 +135,14 @@ public class test {
         userKevGen.addNewPlace(placeMoscow);
         userKevGen.addNewPlace(placeChelybinsk);
 
-        userService.addUser(userKevGen);
+        userService.addUserIfNotExistByChatId(userKevGen);
 
 
         userCherep.addNewPlace(placeSPB);
         userCherep.addNewPlace(placeMoscow);
         userCherep.addNewPlace(placeChelybinsk);
 
-        userService.addUser(userCherep);
+        userService.addUserIfNotExistByChatId(userCherep);
 
         Set<WeatherData> weatherChelyabinsk = new HashSet<>(requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeChelybinsk, 5));
         Set<WeatherData> weatherSPB = new HashSet<>(requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeSPB, 5));
@@ -189,7 +189,7 @@ public class test {
         RequesterDataFromDBOrOpenWeatherMap requesterDataFromDBOrOpenWeatherMap = context.getBean(RequesterDataFromDBOrOpenWeatherMap.class);
 
         User userKevGen = new User("KevGen",1L);
-        userService.addUser(userKevGen);
+        userService.addUserIfNotExistByChatId(userKevGen);
 
         User userCherep = new User("Cherep",2L);
 
@@ -205,14 +205,14 @@ public class test {
         userKevGen.addNewPlace(placeMoscow);
         userKevGen.addNewPlace(placeChelybinsk);
 
-        userService.addUser(userKevGen);
+        userService.addUserIfNotExistByChatId(userKevGen);
 
 
         userCherep.addNewPlace(placeSPB);
         userCherep.addNewPlace(placeMoscow);
         userCherep.addNewPlace(placeChelybinsk);
 
-        userService.addUser(userCherep);
+        userService.addUserIfNotExistByChatId(userCherep);
         //requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeSPB,5);
         List<WeatherData> lwd =requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeSPB,0);
         for(WeatherData wd: lwd){
@@ -236,6 +236,27 @@ public class test {
         for(WeatherData wd: ans){
             System.out.println(wd.toString());
         }
+    }
+    @Test
+    public void addSameIdPlace() throws Exception {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
+        PlaceRepository placeRepository = context.getBean(PlaceRepository.class);
+        UserRepository userRepository = context.getBean(UserRepository.class);
+        WeatherDataRepository weatherDataRepository = context.getBean(WeatherDataRepository.class);
+        UserServiceImpl userService = context.getBean(UserServiceImpl.class);
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("jpaData");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        WeatherRequestHandler weatherRequestHandler = context.getBean(WeatherRequestHandler.class);
+
+
+        User userKevGen = new User();
+        userKevGen.setUserName("KevGen");
+        User userCherep = new User();
+        userCherep.setUserName("Cherep");
+        userCherep.setChatId(5L);
+        userService.addUserIfNotExistByChatId(userCherep);
+        userService.addUserIfNotExistByChatId(userKevGen);
+
     }
 
 }

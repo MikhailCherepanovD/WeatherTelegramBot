@@ -19,4 +19,12 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
    @Query(value = "DELETE FROM USERS WHERE chat_id = ::chatId", nativeQuery = true)
    void deleteByChatId(@Param("chatId") Long chatId);
+
+   @Query(value =
+           "INSERT INTO USERS (chat_id, user_name) SELECT :chatId, :userName \n" +
+           "WHERE NOT EXISTS (" +
+           "SELECT 1 FROM USERS " +
+           "WHERE chat_id = :chatId );", nativeQuery = true)
+   void insertIfNotExistCheckById(@Param("chatId") Long chatId,@Param("userName") String userName);
+
 }
