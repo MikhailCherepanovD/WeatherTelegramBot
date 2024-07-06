@@ -1,6 +1,8 @@
 package ru.spring.core.project.repositories;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
@@ -23,10 +25,23 @@ public interface PlaceRepository extends JpaRepository<Place,Long> {
             "WHERE u.chat_id = :userId", nativeQuery = true)
     List<Place> findAllPlacesByChatId(@Param("userId") Long userId);
 
+
     @Query(value = "SELECT * FROM PLACE WHERE place_name = :placeName", nativeQuery = true)
     List<Place> findAllPlacesByPlaceName(@Param("placeName") String placeName);
 
+    @Modifying
+    @Transactional
     @Query(value = "DELETE FROM Place WHERE place_name = :placeName", nativeQuery = true)
     void deleteByPlaceName(@Param("placeName") String placeName);
 
+    @Modifying
+    @Query(value ="delete from users WHERE users.chat_id=1;" ,nativeQuery = true)
+    void deleteAllPlacesByChatId(@Param("chatId") Long chatId);
 }
+
+/*
+
+"delete FROM user_place up " +
+        "WHERE up.user_id = (" +
+        "SELECT users.id FROM users WHERE users.chat_id = :chatId" +
+        ");"*/

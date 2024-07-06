@@ -101,6 +101,19 @@ public class WeatherRequestHandler {
     };
 
     //Нужные методы:
+
+    public boolean placeIsExistByCityName(String cityName){
+        boolean ans;
+        try {
+            WeatherData currentWeather = getWeatherDataByCityNameNow(cityName);
+            ans=true;
+        }
+        catch (Exception ex) {
+            ans=false;
+        }
+        return ans;
+    }
+
     public WeatherData getWeatherDataByCoordinatesNow(CoordinateForWeatherBot coordinateForWeatherBot)throws Exception {
         double latitude=coordinateForWeatherBot.getLatitude();
         double longitude = coordinateForWeatherBot.getLatitude();
@@ -174,13 +187,8 @@ public class WeatherRequestHandler {
 
     // если передать 0 дней, выведет прогноз на остаток сегодняшнего дня
     // 1 день - на сегодня и на завтра
-    // Максимом - 5 дней. Больше не умеет
-    /**
-     *
-     *
-     *
-     *
-     * **/
+    // Максимум - 5 дней. Больше не умеет
+
     public ArrayList<WeatherData> getWeatherDataByCityNameNDay(String cityName, int amountDays) throws Exception {
         try {
             FiveDayThreeHourStepForecastRequestCustomizer tempObject = openWeatherClient.forecast5Day3HourStep()

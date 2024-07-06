@@ -22,6 +22,11 @@ public class UserServiceImpl implements UserService {
         User savedUser =userRepository.saveAndFlush(user);
         return savedUser;
     }
+    @Override
+    public User updateUser(User user){
+        User updatedUser =userRepository.save(user);
+        return updatedUser;
+    }
 
     @Override
     public void deleteUserById(Long id){

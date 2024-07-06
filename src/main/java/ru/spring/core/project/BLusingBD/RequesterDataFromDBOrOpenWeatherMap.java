@@ -1,9 +1,12 @@
 package ru.spring.core.project.BLusingBD;
 
 
+import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import ru.spring.core.project.DBService.impl.PlaceServiceImpl;
 import ru.spring.core.project.DBService.impl.WeatherDataImpl;
 import ru.spring.core.project.entity.Place;
 import ru.spring.core.project.entity.WeatherData;
@@ -80,8 +83,27 @@ public class RequesterDataFromDBOrOpenWeatherMap {
         else{
             throw new Exception("Name and Coordinates are empty!");
         }
-
+        ans.setPlace(place);
         return ans;
+    }
+    // сначала проверяет в БД, потом спрашивает у OpenWeatherMap
+
+    public Place getPlaceIfExist(String cityName)throws Exception {
+        PlaceServiceImpl  placeService = context.getBean(PlaceServiceImpl.class);
+        List<Place> listPlaces = placeService.getAllPlacesByPlaceName(cityName);
+        if(!listPlaces.isEmpty()){
+            return listPlaces.get(0);
+        }
+        boolean cityIsExist=weatherRequestHandler.placeIsExistByCityName(cityName);
+        Place returnedPlace =new Place();
+        if(cityIsExist){
+            returnedPlace.setPlaceName(cityName);
+            returnedPlace = placeService.addPlace(returnedPlace);
+        }
+        else{
+            throw new Exception("City that name = "+cityName +"is not exist.");
+        }
+        return returnedPlace;
     }
 
 

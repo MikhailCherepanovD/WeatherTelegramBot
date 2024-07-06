@@ -19,7 +19,7 @@ public class User {
     @Column(name = "CHAT_ID")
     private long chatId;
 
-    @ManyToMany(cascade = CascadeType.MERGE , fetch = FetchType.LAZY)       //Merge - нужен для того чтобы уже сохраненные объекты не сохранялись заново, иначе ALL
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)       //Merge - нужен для того чтобы уже сохраненные объекты не сохранялись заново, иначе ALL
     @JoinTable(
             name = "USER_PLACE",
             joinColumns = @JoinColumn(name = "USER_ID"),
@@ -90,6 +90,14 @@ public class User {
     public void addNewPlace(Place place){
         if(setOfPlaces==null)
             setOfPlaces= new HashSet<>();
+        if(setOfPlaces.contains(place)){
+            return ;
+        }
         setOfPlaces.add(place);
+        place.addUser(this);
+    }
+    public void removePlace(Place place){
+        setOfPlaces.remove(place);
+        place.removeUser(this);
     }
 }

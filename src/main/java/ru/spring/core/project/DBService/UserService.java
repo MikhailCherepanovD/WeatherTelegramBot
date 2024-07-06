@@ -8,6 +8,7 @@ import java.util.List;
 @Service
 public interface UserService {
     User addUserIfNotExistByChatId(User user);
+    User updateUser(User user);
     void deleteUserById(Long id);
     void deleteUserByChatId(Long chatId);
     List<User> getAll();

@@ -1,5 +1,7 @@
 package ru.spring.core.project.DBService.impl;
 
+import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.spring.core.project.DBService.PlaceService;
@@ -38,5 +40,16 @@ public class PlaceServiceImpl implements PlaceService {
     public List<Place> getAllLinkedUserByChatId(Long chatId){
         return placeRepository.findAllPlacesByChatId(chatId);
     }
+    @Transactional
+    @Override
+    public void deleteAllLinkedUserByChatId(Long chatId){
+        placeRepository.deleteAllPlacesByChatId(chatId);
+    }
 
+    @Override
+    public List<Place> getAllPlacesByPlaceName(String placeName){
+        List<Place> returned =placeRepository.findAllPlacesByPlaceName(placeName);
+        Hibernate.initialize(returned);
+        return returned;
+    }
 }

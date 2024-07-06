@@ -2,7 +2,10 @@ package ru.spring.core.project;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.spring.core.project.BLusingBD.RequesterDataFromDBOrOpenWeatherMap;
 import ru.spring.core.project.DBService.impl.PlaceServiceImpl;
@@ -39,9 +42,11 @@ public class test {
 
         User userKevGen = new User();
         userKevGen.setUserName("KevGen");
+        userKevGen.setChatId(1L);
         userRepository.save(userKevGen);
         User userCherep = new User();
         userCherep.setUserName("Cherep");
+        userCherep.setChatId(2L);
         userRepository.save(userCherep);
         userRepository.save(userCherep);
         userRepository.save(userCherep);
@@ -106,7 +111,8 @@ public class test {
             System.out.println(wd.toString());
         }
 
-        List<Place> cits = placeRepository.findAllPlacesByPlaceName("Челябинск");
+
+
 
 
     }
@@ -167,7 +173,11 @@ public class test {
         System.out.println("Текущая погода в челябинске :\n\n\n\n "+ currWd.get(0).toString());
 
 
-
+        List<Place> lp = placeService.getAllLinkedUserByChatId(userCherep.getChatId());
+        for(Place p: lp){
+            System.out.println(p.getPlaceName());
+        }
+        placeService.deleteAllLinkedUserByChatId(2L);
 
     }
 
@@ -225,6 +235,7 @@ public class test {
 
 
 
+
     @Test
     public void testGettingFromDB() throws Exception {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
@@ -258,5 +269,122 @@ public class test {
         userService.addUserIfNotExistByChatId(userKevGen);
 
     }
+    @Test
+    public void addIncorrectPlace()throws Exception {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
+        PlaceRepository placeRepository = context.getBean(PlaceRepository.class);
+        UserRepository userRepository = context.getBean(UserRepository.class);
+        WeatherDataRepository weatherDataRepository = context.getBean(WeatherDataRepository.class);
+        UserServiceImpl userService = context.getBean(UserServiceImpl.class);
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("jpaData");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        WeatherRequestHandler weatherRequestHandler = context.getBean(WeatherRequestHandler.class);
+        User userKevGen = new User();
+        userKevGen.setUserName("KevGen");
+        userService.addUserIfNotExistByChatId(userKevGen);
+        Place placeSPB =new Place();
+        placeSPB.setPlaceName("Санкт-Петербург");
+        userKevGen.addNewPlace(placeSPB);
+        placeRepository.save(placeSPB);
+
+    }
+    @Test
+    public void testGetPlaceIfExist()throws Exception {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
+        RequesterDataFromDBOrOpenWeatherMap requesterDataFromDBOrOpenWeatherMap =  context.getBean(RequesterDataFromDBOrOpenWeatherMap.class);
+        try {
+            Place place = requesterDataFromDBOrOpenWeatherMap.getPlaceIfExist("Москвkjkh555а");
+            System.out.println("Нашли город "+place.getPlaceName());
+        }catch (Exception e){
+            System.out.println("Не нашли город ");
+        }
+    }
+
+
+
+
+
+    @Test
+    public void testAddBDUsingRepoN2() throws Exception{
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
+        PlaceRepository placeRepository = context.getBean(PlaceRepository.class);
+        UserRepository userRepository = context.getBean(UserRepository.class);
+
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("jpaData");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+
+
+        User userKevGen = new User();
+        userKevGen.setUserName("KevGen");
+        userKevGen.setChatId(1L);
+
+        Place placeSPB =new Place();
+        placeSPB.setPlaceName("Санкт-Петербург");
+
+
+        userKevGen.addNewPlace(placeSPB);
+        placeRepository.saveAndFlush(placeSPB);
+        userRepository.saveAndFlush(userKevGen);
+
+        entityManager.close();
+
+    }
+
+
+
+
+    @Test
+    public void testAddUserAndPaceBD() throws Exception {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
+        PlaceServiceImpl placeService = context.getBean(PlaceServiceImpl.class);
+        UserServiceImpl userService = context.getBean(UserServiceImpl.class);
+
+        User userKevGen = new User("KevGen",1L);
+        User userCherep = new User("Cherep",2L);
+
+
+        Place placeMSC=new Place("Москва");
+
+        userCherep.addNewPlace(placeMSC);
+        userKevGen.addNewPlace(placeMSC);
+        placeService.addPlace(placeMSC);
+
+        userService.addUserIfNotExistByChatId(userKevGen);
+        userService.addUserIfNotExistByChatId(userCherep);
+
+        List<Place> listPlaces = placeService.getAllPlacesByPlaceName("Москва");
+
+        Place p0 = listPlaces.get(0);
+
+        userCherep.addNewPlace(p0);
+        userService.updateUser(userCherep);
+        userCherep.addNewPlace(p0);
+        userService.updateUser(userCherep);
+        userCherep.addNewPlace(p0);
+        p0.setPlaceName("Москва");
+        userService.updateUser(userCherep);
+        userCherep.addNewPlace(p0);
+        userService.updateUser(userCherep);
+
+    }
+    @Transactional
+    @Test
+    public void testDeleteLinkBD() throws Exception {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
+        PlaceServiceImpl placeService = context.getBean(PlaceServiceImpl.class);
+        UserServiceImpl userService = context.getBean(UserServiceImpl.class);
+
+        User userKevGen = new User("KevGen",1L);
+        Place placeMSC=new Place("Москва");
+
+        userKevGen.addNewPlace(placeMSC);
+        placeService.addPlace(placeMSC);
+        userService.addUserIfNotExistByChatId(userKevGen);
+        userKevGen.removePlace(placeMSC);
+        int h=0;
+
+    }
+
 
 }

@@ -19,10 +19,10 @@ public class Place {
 
 
 
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "place", cascade = CascadeType.ALL )
     private Set<WeatherData> setOfWeatherData;
 
-    @ManyToMany(mappedBy = "setOfPlaces")
+    @ManyToMany(mappedBy = "setOfPlaces", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<User> setOfUser;
 
     @Embedded
@@ -93,12 +93,12 @@ public class Place {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Place place = (Place) o;
-        return id == place.id && Objects.equals(placeName, place.placeName) && Objects.equals(setOfWeatherData, place.setOfWeatherData) && Objects.equals(setOfUser, place.setOfUser) && Objects.equals(coordinate, place.coordinate);
+        return Objects.equals(placeName, place.placeName); //&& Objects.equals(setOfWeatherData, place.setOfWeatherData) && Objects.equals(setOfUser, place.setOfUser) && Objects.equals(coordinate, place.coordinate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, placeName, setOfWeatherData, setOfUser, coordinate);
+        return Objects.hash(placeName);//, setOfWeatherData, setOfUser, coordinate);
     }
 
 
@@ -111,5 +111,22 @@ public class Place {
         if(setOfWeatherData==null)
             setOfWeatherData=new HashSet<>();
         setOfWeatherData.add(weatherData);
+    }
+    public void addUser(User user){
+        if(setOfUser==null)
+            setOfUser=new HashSet<>();
+        setOfUser.add(user);
+    }
+    protected void removeUser(User user){
+        //setOfUser.remove(user);
+        float hash1 = user.hashCode();
+        float hash2;
+        for(User user1 : setOfUser){
+           if(user1.equals(user)){
+               setOfUser.remove(user1);
+           }
+        }
+        int h=1;
+
     }
 }
