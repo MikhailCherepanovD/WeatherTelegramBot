@@ -3,10 +3,7 @@ package ru.spring.core.project.entity;
 import jakarta.persistence.*;
 import ru.spring.core.project.weatherCommunication.CoordinateForWeatherBot;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "PLACE")
@@ -20,23 +17,23 @@ public class Place {
 
 
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "place", cascade = CascadeType.ALL )
-    private Set<WeatherData> setOfWeatherData;
+    private List<WeatherData> listOfWeatherData;
 
-    @ManyToMany(mappedBy = "setOfPlaces", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private Set<User> setOfUser;
+    @ManyToMany(mappedBy = "listOfPlaces", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private List<User> listOfUser;
 
     @Embedded
     CoordinateForWeatherBot coordinate;
 
-    public Set<User> getSetOfUser() {
-        return setOfUser;
+    public List<User> getListOfUser() {
+        return listOfUser;
     }
-    public Set<WeatherData> getSetOfWeatherData() { return setOfWeatherData; }
+    public List<WeatherData> getListOfWeatherData() { return listOfWeatherData; }
 
-    public void setSetOfWeatherData(Set<WeatherData> setOfWeatherData) { this.setOfWeatherData = setOfWeatherData; }
+    public void setListOfWeatherData(List<WeatherData> listOfWeatherData) { this.listOfWeatherData = listOfWeatherData; }
 
-    public void setSetOfUser(Set<User> setOfUser) {
-        this.setOfUser = setOfUser;
+    public void setListOfUser(List<User> listOfUser) {
+        this.listOfUser = listOfUser;
     }
     public long getId() {
         return id;
@@ -82,8 +79,8 @@ public class Place {
         return "Place{" +
                 "id=" + id +
                 ", placeName='" + placeName + '\'' +
-                ", setOfWeatherData=" + setOfWeatherData +
-                ", setOfUser=" + setOfUser +
+                ", setOfWeatherData=" + listOfWeatherData +
+                ", setOfUser=" + listOfUser +
                 ", coordinate=" + coordinate +
                 '}';
     }
@@ -103,27 +100,27 @@ public class Place {
 
 
     public void addWeatherData(List<WeatherData> listOfWeatherData){
-        if(setOfWeatherData==null)
-            setOfWeatherData=new HashSet<>();
-        setOfWeatherData.addAll(listOfWeatherData);
+        if(this.listOfWeatherData ==null)
+            this.listOfWeatherData =new ArrayList<>();
+        this.listOfWeatherData.addAll(listOfWeatherData);
     }
     public void addWeatherData(WeatherData weatherData){
-        if(setOfWeatherData==null)
-            setOfWeatherData=new HashSet<>();
-        setOfWeatherData.add(weatherData);
+        if(listOfWeatherData ==null)
+            listOfWeatherData =new ArrayList<>();
+        listOfWeatherData.add(weatherData);
     }
     public void addUser(User user){
-        if(setOfUser==null)
-            setOfUser=new HashSet<>();
-        setOfUser.add(user);
+        if(listOfUser ==null)
+            listOfUser =new ArrayList<>();
+        listOfUser.add(user);
     }
     protected void removeUser(User user){
         //setOfUser.remove(user);
         float hash1 = user.hashCode();
         float hash2;
-        for(User user1 : setOfUser){
+        for(User user1 : listOfUser){
            if(user1.equals(user)){
-               setOfUser.remove(user1);
+               listOfUser.remove(user1);
            }
         }
         int h=1;

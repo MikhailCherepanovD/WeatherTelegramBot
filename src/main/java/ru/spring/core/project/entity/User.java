@@ -2,9 +2,7 @@ package ru.spring.core.project.entity;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "USERS")
@@ -25,15 +23,15 @@ public class User {
             joinColumns = @JoinColumn(name = "USER_ID"),
             inverseJoinColumns = @JoinColumn(name = "PLACE_ID")
     )
-    Set<Place> setOfPlaces;
+    List<Place> listOfPlaces;
 
 
-    public Set<Place> getSetOfPlaces() {
-        return setOfPlaces;
+    public List<Place> getListOfPlaces() {
+        return listOfPlaces;
     }
 
-    public void setSetOfPlaces(Set<Place> setOfPlaces) {
-        this.setOfPlaces = setOfPlaces;
+    public void setListOfPlaces(List<Place> listOfPlaces) {
+        this.listOfPlaces = listOfPlaces;
     }
     public long getId() {
         return id;
@@ -88,16 +86,16 @@ public class User {
                 '}';
     }
     public void addNewPlace(Place place){
-        if(setOfPlaces==null)
-            setOfPlaces= new HashSet<>();
-        if(setOfPlaces.contains(place)){
+        if(listOfPlaces ==null)
+            listOfPlaces = new ArrayList<>();
+        if(listOfPlaces.contains(place)){
             return ;
         }
-        setOfPlaces.add(place);
+        listOfPlaces.add(place);
         place.addUser(this);
     }
     public void removePlace(Place place){
-        setOfPlaces.remove(place);
+        listOfPlaces.remove(place);
         place.removeUser(this);
     }
 }

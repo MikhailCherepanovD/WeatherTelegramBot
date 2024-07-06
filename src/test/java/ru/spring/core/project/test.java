@@ -3,9 +3,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.transaction.Transactional;
-import org.hibernate.Hibernate;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.spring.core.project.BLusingBD.RequesterDataFromDBOrOpenWeatherMap;
 import ru.spring.core.project.DBService.impl.PlaceServiceImpl;
@@ -72,12 +70,12 @@ public class test {
 
 
 
-        Set<Place> setOfPlaces = new HashSet<>();
-        setOfPlaces.add(placeSPB);
-        setOfPlaces.add(placeChelyabinsk);
-        setOfPlaces.add(placeMoscow);
-        userKevGen.setSetOfPlaces(setOfPlaces);
-        userCherep.setSetOfPlaces(setOfPlaces);
+        List<Place> listOfPlaces = new ArrayList<>();
+        listOfPlaces.add(placeSPB);
+        listOfPlaces.add(placeChelyabinsk);
+        listOfPlaces.add(placeMoscow);
+        userKevGen.setListOfPlaces(listOfPlaces);
+        userCherep.setListOfPlaces(listOfPlaces);
 
 
 
@@ -150,9 +148,9 @@ public class test {
 
         userService.addUserIfNotExistByChatId(userCherep);
 
-        Set<WeatherData> weatherChelyabinsk = new HashSet<>(requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeChelybinsk, 5));
-        Set<WeatherData> weatherSPB = new HashSet<>(requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeSPB, 5));
-        Set<WeatherData> weatherMoskow = new HashSet<>(requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeMoscow, 5));
+        List<WeatherData> weatherChelyabinsk = new ArrayList<>(requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeChelybinsk, 5));
+        List<WeatherData> weatherSPB = new ArrayList<>(requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeSPB, 5));
+        List<WeatherData> weatherMoskow = new ArrayList<>(requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeMoscow, 5));
 
         for(WeatherData wd: weatherChelyabinsk ){
             wd.setPlace(placeChelybinsk);
@@ -177,7 +175,7 @@ public class test {
         for(Place p: lp){
             System.out.println(p.getPlaceName());
         }
-        placeService.deleteAllLinkedUserByChatId(2L);
+        //placeService.deleteAllLinkedUserByChatId(2L);
 
     }
 
