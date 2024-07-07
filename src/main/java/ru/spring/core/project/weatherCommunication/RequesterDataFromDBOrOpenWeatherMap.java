@@ -1,8 +1,6 @@
-package ru.spring.core.project.BLusingBD;
+package ru.spring.core.project.weatherCommunication;
 
 
-import jakarta.transaction.Transactional;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -10,8 +8,6 @@ import ru.spring.core.project.DBService.impl.PlaceServiceImpl;
 import ru.spring.core.project.DBService.impl.WeatherDataImpl;
 import ru.spring.core.project.entity.Place;
 import ru.spring.core.project.entity.WeatherData;
-import ru.spring.core.project.weatherCommunication.CoordinateForWeatherBot;
-import ru.spring.core.project.weatherCommunication.WeatherRequestHandler;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -37,7 +33,8 @@ public class RequesterDataFromDBOrOpenWeatherMap {
         List<WeatherData> ans = new ArrayList<>();
 
         if(!place.placeNameIsNull()&&!place.getPlaceName().equals("")){
-            ans = weatherDataService.getAllWeatherDataByPlaceAndDateAfterCurrentTime(place.getPlaceName(),currTime,currDate);
+            if(amountDays==0)
+                ans = weatherDataService.getAllWeatherDataByPlaceAndDateAfterCurrentTime(place.getPlaceName(),currTime,currDate);
             if(ans.isEmpty()){
                 ans = weatherRequestHandler.getWeatherDataByCityNameNDay(place.getPlaceName(), amountDays);
                 for(WeatherData wd :ans){

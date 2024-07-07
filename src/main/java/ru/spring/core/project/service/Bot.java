@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.spring.core.project.BLusingBD.RequesterDataFromDBOrOpenWeatherMap;
+import ru.spring.core.project.weatherCommunication.RequesterDataFromDBOrOpenWeatherMap;
 import ru.spring.core.project.DBService.impl.PlaceServiceImpl;
 import ru.spring.core.project.DBService.impl.UserServiceImpl;
 import ru.spring.core.project.DBService.impl.WeatherDataImpl;
@@ -21,7 +21,6 @@ import ru.spring.core.project.config.BotConfig;
 import ru.spring.core.project.entity.Place;
 import ru.spring.core.project.entity.User;
 import ru.spring.core.project.entity.WeatherData;
-import ru.spring.core.project.statemachine.BotState;
 import ru.spring.core.project.weatherCommunication.CoordinateForWeatherBot;
 import ru.spring.core.project.weatherCommunication.WeatherRequestHandler;
 import ru.spring.core.project.utils.ResponseWeatherForecastGenerator;
@@ -103,7 +102,7 @@ public class Bot extends TelegramLongPollingBot {
             errorIncorrectMessege(update);
         }
     }
-
+    //Реализация Конечного автомата
     private void handleMessege(Update update){
         String message = update.getMessage().getText();
         if(currentState==BotState.BEFORE_START){
@@ -185,11 +184,7 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-
-
-
-
-
+    //Обработка полученных сообщений
     private void startHandle(Update update) {
         long chatId = update.getMessage().getChatId();
         String userName = update.getMessage().getFrom().getFirstName();
@@ -200,19 +195,7 @@ public class Bot extends TelegramLongPollingBot {
         currentUser = userService.addUserIfNotExistByChatId(newUser);
         changeBotState(BotState.AFTER_START);
     }
-    private void errorBeforeStartHandle(Update update){
-        long chatId = update.getMessage().getChatId();
-        String response ="Нажмите /start чтобы начать общение.";
-        sendMessage(chatId, response);
-    }
-    private void errorInputIncorrectOptionHandle(Update update){
-        long chatId = update.getMessage().getChatId();
-        String response ="Вы ввели некорректную опцию. Начните заново.";
-        sendMessage(chatId, response);
-        sendInfoAfterStartMessege(chatId);
-        changeBotState(BotState.AFTER_START);
 
-    }
     private void clearHandle(Update update){
         long chatId = update.getMessage().getChatId();
         String response ="Вы уверены, что хотите очистить все данные о вас?"+
@@ -351,6 +334,20 @@ public class Bot extends TelegramLongPollingBot {
         changeBotState(BotState.SENT_CITY_NAME_OR_LOCATION);
     }
 
+    //Сообщения об ошибках
+    private void errorBeforeStartHandle(Update update){
+        long chatId = update.getMessage().getChatId();
+        String response ="Нажмите /start чтобы начать общение.";
+        sendMessage(chatId, response);
+    }
+    private void errorInputIncorrectOptionHandle(Update update){
+        long chatId = update.getMessage().getChatId();
+        String response ="Вы ввели некорректную опцию. Начните заново.";
+        sendMessage(chatId, response);
+        sendInfoAfterStartMessege(chatId);
+        changeBotState(BotState.AFTER_START);
+
+    }
     private void errorIncorrectReceiveLocationHandle(Update update){
         long chatId = update.getMessage().getChatId();
         String response = "Ошибка при обработке локации. Отправка локации не ожидается в этом состоянии.";
@@ -367,18 +364,12 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
+    //Отправка сообщений
     private void sendInfoAfterStartMessege(long chatId){
         String response= "Отправьте мне название города или локацию, чтобы узнать погоду."+
                 "\n **Чтобы посмотреть, что я умею**  - нажмите /help.";
         sendMessage(chatId,response);
     };
-
-
-
-
-
-
-
 
     private void sendMessage(long chatId, String message) {
         SendMessage sendMessage = new SendMessage();

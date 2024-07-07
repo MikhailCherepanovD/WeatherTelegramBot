@@ -28,16 +28,6 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public void deleteById(Long id){
-        placeRepository.deleteById(id);
-    }
-
-    @Override
-    public void deleteByCityName(String cityName){ //пока не работает
-        placeRepository.deleteByPlaceName(cityName);
-    }
-
-    @Override
     public List<Place> getAll(){
         return placeRepository.findAll();
     }
@@ -45,11 +35,6 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     public List<Place> getAllLinkedUserByChatId(Long chatId){
         return placeRepository.findAllPlacesByChatId(chatId);
-    }
-    @Transactional
-    @Override
-    public void deleteAllLinksUserByChatId(Long chatId){
-        placeRepository.deleteAllPlacesByChatId(chatId);
     }
 
     @Override

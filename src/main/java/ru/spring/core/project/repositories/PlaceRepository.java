@@ -17,8 +17,6 @@ import java.util.Set;
 
 @Repository
 public interface PlaceRepository extends JpaRepository<Place,Long> {
-    //По аннотации @Query можем использовать напрямую SQL запрос
-
     @Query(value = "SELECT p.* FROM PLACE p " +
             "JOIN USER_PLACE up ON p.id = up.PLACE_ID " +
             "JOIN USERS u ON up.USER_ID = u.id " +
@@ -39,9 +37,3 @@ public interface PlaceRepository extends JpaRepository<Place,Long> {
     void deleteAllPlacesByChatId(@Param("chatId") Long chatId);
 }
 
-/*
-
-"delete FROM user_place up " +
-        "WHERE up.user_id = (" +
-        "SELECT users.id FROM users WHERE users.chat_id = :chatId" +
-        ");"*/

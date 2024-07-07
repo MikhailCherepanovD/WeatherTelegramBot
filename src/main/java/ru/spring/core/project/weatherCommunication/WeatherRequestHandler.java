@@ -34,72 +34,6 @@ public class WeatherRequestHandler {
         config = configuration;
         openWeatherClient = new OpenWeatherMapClient(config.getOpenWeatherMapKey());
     }
-
-
-    // этот метод оставил для теста
-    private String parseWeatherReturnString(Weather parseWeather, String city){
-        return  city + "\n\n" +"Now:\n"+
-                Math.round(parseWeather.getTemperature().getValue())+"\n"
-                +parseWeather.getWeatherState()+"\n"
-                +parseWeather.getAtmosphericPressure()+"\n"
-                +parseWeather.getHumidity()+"\n";
-    };
-    // этот метод оставил для теста
-    String parseForecastReturnString(WeatherForecast parseWeather){
-        return parseWeather.getForecastTimeISO()+"\n"
-                +Math.round(parseWeather.getTemperature().getValue())+"\n"
-                +parseWeather.getWeatherState()+"\n"
-                +parseWeather.getAtmosphericPressure()+"\n"
-                +parseWeather.getHumidity()+"\n";
-    };
-
-    // этот метод оставил для теста
-    public String getAnswerCityNowReturnString(String cityName){
-        try {
-            Weather currentWeather = openWeatherClient
-                    .currentWeather()
-                    .single()
-                    .byCityName(cityName)
-                    .language(Language.ENGLISH)
-                    .unitSystem(UnitSystem.METRIC)
-                    .retrieve()
-                    .asJava();
-            String response = parseWeatherReturnString(currentWeather, cityName);
-            return response;
-        }
-        catch(Exception e){
-            System.out.println("Произошло исключение: " + e);
-            return "error";
-        }
-    };
-
-
-    // этот метод оставил для теста
-    public String getAnswerCityTodayReturnString(String cityName){
-        try {
-            List<WeatherForecast> listForecast = openWeatherClient.forecast5Day3HourStep()
-                    .byCityName(cityName).language(Language.RUSSIAN)
-                    .unitSystem(UnitSystem.METRIC)
-                    .count(8)
-                    .retrieve().asJava().getWeatherForecasts();
-            String ans = "Сегодня: \n";
-            for (int i = 0; i < listForecast.size(); i++) {
-                LocalTime now = LocalTime.now();
-                if (listForecast.get(i).getForecastTime().toLocalTime().isAfter(now)) {
-                    break;
-                }
-                ans += listForecast.get(i).getForecastTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) + " ";
-                ans += parseForecastReturnString(listForecast.get(i));
-            }
-            //String ans=ParseWeather(listForecast.get(i).getWeatherState());
-            return ans;
-        }
-        catch(Exception e){
-            System.out.println("Произошло исключение: " + e);
-            return "error";
-        }
-    };
-
     //Нужные методы:
 
     public boolean placeIsExistByCityName(String cityName){
@@ -275,13 +209,4 @@ public class WeatherRequestHandler {
         weatherData.setWeatherStateDescription(weatherForecast.getWeatherState().getDescription());
         return weatherData;
     }
-
-
-
-
-
-
-    ///////////////////////////////////////////////////////////// Остануться только эти методы
-
-
 }

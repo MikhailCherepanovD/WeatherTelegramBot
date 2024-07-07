@@ -1,4 +1,4 @@
-package ru.spring.core.project.statemachine;
+package ru.spring.core.project.service;
 
 public enum BotState {
     BEFORE_START,

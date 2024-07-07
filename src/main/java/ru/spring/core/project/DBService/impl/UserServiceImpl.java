@@ -34,16 +34,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserById(Long id){
-        userRepository.deleteById(id);
-    }
-
-    @Override
-    public void deleteUserByChatId(Long chatId){
-        userRepository.deleteByChatId(chatId);
-    }
-
-    @Override
     public List<User> getAll(){
         return userRepository.findAll();
     }

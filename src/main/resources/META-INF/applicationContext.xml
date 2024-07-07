@@ -40,7 +40,7 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.format_sql">false</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop><!-- Если нам не нужно создавать БД заново, указать create/update-->
+                <prop key="hibernate.hbm2ddl.auto">create</prop><!-- Если нам не нужно создавать БД заново, указать create/update-->
             </props>
         </property>
     </bean>
