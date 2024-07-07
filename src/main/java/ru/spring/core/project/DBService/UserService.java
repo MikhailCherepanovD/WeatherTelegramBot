@@ -11,6 +11,7 @@ public interface UserService {
     User updateUser(User user);
     void deleteUserById(Long id);
     void deleteUserByChatId(Long chatId);
+    User deleteAllLinksWithPlaces(User user);
     List<User> getAll();
     List<User> getUsersByChatId(Long chatId);
 

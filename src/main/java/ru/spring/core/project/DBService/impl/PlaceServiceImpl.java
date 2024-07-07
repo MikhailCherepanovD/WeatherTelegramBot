@@ -22,6 +22,12 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    public Place updatePlace(Place place){
+        Place updatedPlace =placeRepository.save(place);
+        return updatedPlace;
+    }
+
+    @Override
     public void deleteById(Long id){
         placeRepository.deleteById(id);
     }
@@ -42,7 +48,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
     @Transactional
     @Override
-    public void deleteAllLinkedUserByChatId(Long chatId){
+    public void deleteAllLinksUserByChatId(Long chatId){
         placeRepository.deleteAllPlacesByChatId(chatId);
     }
 

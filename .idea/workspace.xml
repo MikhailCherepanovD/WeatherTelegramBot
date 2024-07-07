@@ -6,10 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="6ed9d13b-f1fb-452d-bf38-2e32284bd08a" name="Changes" comment="Add first logic DB">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file:/home/mikhail/Разработка/6_sem/java/Weather-Bot/src/main/resources/logs/your_log_file.log" beforeDir="false" afterPath="$PROJECT_DIR$/file:/home/mikhail/Разработка/6_sem/java/Weather-Bot/src/main/resources/logs/your_log_file.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/BLusingBD/RequesterDataFromDBOrOpenWeatherMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/BLusingBD/RequesterDataFromDBOrOpenWeatherMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/PlaceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/PlaceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/PlaceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/PlaceServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/UserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/Test.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/Place.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/Place.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/Bot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/utils/ResponseWeatherForecastGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/utils/ResponseWeatherForecastGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -49,12 +56,14 @@
   "keyToString": {
     "Application.Main.executor": "Run",
     "JUnit.test.addIncorrectPlace.executor": "Run",
-    "JUnit.test.addSameIdPlace.executor": "Debug",
+    "JUnit.test.addSameIdPlace.executor": "Run",
     "JUnit.test.executor": "Run",
     "JUnit.test.testAddBDUsingRepoN2.executor": "Run",
+    "JUnit.test.testAddDublicatePlaces.executor": "Run",
     "JUnit.test.testAddUserAndPaceBD.executor": "Run",
     "JUnit.test.testDBService.executor": "Run",
-    "JUnit.test.testDeleteLinkBD.executor": "Debug",
+    "JUnit.test.testDeleteLinkBD.executor": "Run",
+    "JUnit.test.testDeleteLinksUsingSQL.executor": "Run",
     "JUnit.test.testFunction1.executor": "Run",
     "JUnit.test.testGetPlaceIfExist.executor": "Run",
     "JUnit.test.testGettingFromDB.executor": "Run",
@@ -75,7 +84,20 @@
       <recent name="$PROJECT_DIR$/src/main/resources/META-INF" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.test.addIncorrectPlace">
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ru.spring.core.project.Main" />
+      <module name="WatherBot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.spring.core.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="test.addIncorrectPlace" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="WatherBot" />
       <extension name="coverage">
@@ -92,7 +114,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="test.addSameIdPlace" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="test.testAddDublicatePlaces" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="WatherBot" />
       <extension name="coverage">
         <pattern>
@@ -102,13 +124,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="ru.spring.core.project" />
       <option name="MAIN_CLASS_NAME" value="ru.spring.core.project.test" />
-      <option name="METHOD_NAME" value="addSameIdPlace" />
+      <option name="METHOD_NAME" value="testAddDublicatePlaces" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="test.testGettingFromDB" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="test.testDeleteLinkBD" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="WatherBot" />
       <extension name="coverage">
         <pattern>
@@ -118,13 +140,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="ru.spring.core.project" />
       <option name="MAIN_CLASS_NAME" value="ru.spring.core.project.test" />
-      <option name="METHOD_NAME" value="testGettingFromDB" />
+      <option name="METHOD_NAME" value="testDeleteLinkBD" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="test.testRequesterDataFromDBOrOpenWeatherMap" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="test.testDeleteLinksUsingSQL" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="WatherBot" />
       <extension name="coverage">
         <pattern>
@@ -134,23 +156,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="ru.spring.core.project" />
       <option name="MAIN_CLASS_NAME" value="ru.spring.core.project.test" />
-      <option name="METHOD_NAME" value="testRequesterDataFromDBOrOpenWeatherMap" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="test.testWeatherRequestHandler" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="WatherBot" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ru.spring.core.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ru.spring.core.project" />
-      <option name="MAIN_CLASS_NAME" value="ru.spring.core.project.test" />
-      <option name="METHOD_NAME" value="testWeatherRequestHandler" />
+      <option name="METHOD_NAME" value="testDeleteLinksUsingSQL" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -158,11 +164,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.test.testAddDublicatePlaces" />
+        <item itemvalue="JUnit.test.testDeleteLinksUsingSQL" />
+        <item itemvalue="JUnit.test.testDeleteLinkBD" />
         <item itemvalue="JUnit.test.addIncorrectPlace" />
-        <item itemvalue="JUnit.test.addSameIdPlace" />
-        <item itemvalue="JUnit.test.testGettingFromDB" />
-        <item itemvalue="JUnit.test.testRequesterDataFromDBOrOpenWeatherMap" />
-        <item itemvalue="JUnit.test.testWeatherRequestHandler" />
       </list>
     </recent_temporary>
   </component>
@@ -218,49 +224,49 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/BLusingBD/RequesterDataFromDBOrOpenWeatherMap.java</url>
-          <line>40</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java</url>
-          <line>243</line>
+          <line>244</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java</url>
-          <line>293</line>
+          <line>294</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/BLusingBD/RequesterDataFromDBOrOpenWeatherMap.java</url>
-          <line>94</line>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java</url>
-          <line>363</line>
+          <line>364</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/PlaceServiceImpl.java</url>
-          <line>45</line>
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/utils/ResponseWeatherForecastGenerator.java</url>
-          <line>38</line>
-          <option name="timeStamp" value="32" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/utils/ResponseWeatherForecastGenerator.java</url>
-          <line>23</line>
-          <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java</url>
-          <line>382</line>
+          <line>383</line>
           <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/Bot.java</url>
+          <line>282</line>
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/BLusingBD/RequesterDataFromDBOrOpenWeatherMap.java</url>
+          <line>64</line>
+          <option name="timeStamp" value="67" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/Place.java</url>
+          <line>123</line>
+          <option name="timeStamp" value="68" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/utils/ResponseWeatherForecastGenerator.java</url>
+          <line>21</line>
+          <option name="timeStamp" value="69" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/BLusingBD/RequesterDataFromDBOrOpenWeatherMap.java</url>
+          <line>33</line>
+          <option name="timeStamp" value="70" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

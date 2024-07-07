@@ -36,7 +36,7 @@ public class RequesterDataFromDBOrOpenWeatherMap {
         LocalTime currTime =  LocalTime.now();
         List<WeatherData> ans = new ArrayList<>();
 
-        if(!place.getPlaceName().equals("")){
+        if(!place.placeNameIsNull()&&!place.getPlaceName().equals("")){
             ans = weatherDataService.getAllWeatherDataByPlaceAndDateAfterCurrentTime(place.getPlaceName(),currTime,currDate);
             if(ans.isEmpty()){
                 ans = weatherRequestHandler.getWeatherDataByCityNameNDay(place.getPlaceName(), amountDays);
@@ -54,7 +54,9 @@ public class RequesterDataFromDBOrOpenWeatherMap {
         else{
             throw new Exception("Name and Coordinates is empty");
         }
-
+        for(WeatherData wd:ans){
+            wd.setPlace(place);
+        }
         return ans;
     }
 
@@ -66,7 +68,7 @@ public class RequesterDataFromDBOrOpenWeatherMap {
         WeatherData ans;
         List<WeatherData> currentWeatherData = new ArrayList<>();
 
-        if(!place.getPlaceName().equals("")){
+        if(!place.getPlaceName().equals(null) && !place.getPlaceName().equals("")){
             currentWeatherData = weatherDataService.getAllWeatherDataByPlaceAndDateNearCurrentTime(place.getPlaceName(),currTime,currDate);
             if(currentWeatherData.size()>0){
                 ans = currentWeatherData.get(0);

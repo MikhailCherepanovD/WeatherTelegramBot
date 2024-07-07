@@ -19,11 +19,18 @@ public class ResponseWeatherForecastGenerator {
 
     public List<String> getResponseByListOfWeatherData(List<WeatherData> listOfWeatherData){
         List<String> ls = new ArrayList<>();
-        String header = "*Погода в городе "+listOfWeatherData.get(0).getPlace().getPlaceName()+":*";
+        String header="";
+        if(!listOfWeatherData.get(0).getPlace().placeNameIsNull() &&!listOfWeatherData.get(0).getPlace().getPlaceName().equals("")){
+            header+="*Погода в городе ";
+            header+= listOfWeatherData.get(0).getPlace().getPlaceName();
+        }
+        else{
+            header+="*Погода по вашим координатам:*";
+        }
         ls.add(header);
         for(int i =0;i<listOfWeatherData.size();i++) {
             LocalDate currentDate = listOfWeatherData.get(i).getDate();
-            String strSingleDate="*"+currentDate.format(DateTimeFormatter.ofPattern("MMMM-dd"))+"*\n\n\n";
+            String strSingleDate="*"+currentDate.format(DateTimeFormatter.ofPattern("MMMM-dd"))+" "+currentDate.getDayOfWeek()+"*\n\n\n";
 
             while ( i<listOfWeatherData.size() && listOfWeatherData.get(i).getDate().equals(currentDate)){
                 strSingleDate+=listOfWeatherData.get(i).getTime().format(DateTimeFormatter.ofPattern("HH:mm"))+"\n";
@@ -37,9 +44,16 @@ public class ResponseWeatherForecastGenerator {
 
     public String getResponseBySingleWeatherData(WeatherData weatherData){
         StringBuilder answer = new StringBuilder("");
-        answer.append("*Погода в городе ");
-        answer.append(weatherData.getPlace().getPlaceName());
-        answer.append(" сейчас:*");
+        if(!weatherData.getPlace().placeNameIsNull() &&!weatherData.getPlace().getPlaceName().equals("")){
+            answer.append("*Погода в городе ");
+            answer.append(weatherData.getPlace().getPlaceName());
+            answer.append(" сейчас:*");
+        }
+        else{
+            answer.append("*Погода по вашим координатам сейчас:*");
+        }
+
+
 
         answer.append("\n\n*Температура:* ");
         answer.append(weatherData.getTemperature());

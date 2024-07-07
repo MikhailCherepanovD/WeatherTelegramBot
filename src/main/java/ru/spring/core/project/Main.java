@@ -12,7 +12,5 @@ public class Main {
         logger.info("This is an info message.");
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
         context.getBean(BotInitializer.class).init();
-
-
     }
 }

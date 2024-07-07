@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.transaction.Transactional;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.spring.core.project.BLusingBD.RequesterDataFromDBOrOpenWeatherMap;
 import ru.spring.core.project.DBService.impl.PlaceServiceImpl;
@@ -283,7 +284,7 @@ public class test {
         Place placeSPB =new Place();
         placeSPB.setPlaceName("Санкт-Петербург");
         userKevGen.addNewPlace(placeSPB);
-        placeRepository.save(placeSPB);
+        //placeRepository.save(placeSPB);
 
     }
     @Test
@@ -368,7 +369,7 @@ public class test {
     }
     @Transactional
     @Test
-    public void testDeleteLinkBD() throws Exception {
+    public void testDeleteLinksUsingListsRemoving() throws Exception {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
         PlaceServiceImpl placeService = context.getBean(PlaceServiceImpl.class);
         UserServiceImpl userService = context.getBean(UserServiceImpl.class);
@@ -381,8 +382,109 @@ public class test {
         userService.addUserIfNotExistByChatId(userKevGen);
         userKevGen.removePlace(placeMSC);
         int h=0;
+        userService.updateUser(userKevGen);
+        placeService.updatePlace(placeMSC);
 
     }
 
+    @Transactional
+    @Test
+    public void testDeleteLinksUsingSQL() throws Exception {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
+        PlaceServiceImpl placeService = context.getBean(PlaceServiceImpl.class);
+        UserServiceImpl userService = context.getBean(UserServiceImpl.class);
+
+        User userKevGen = new User("KevGen",1L);
+        Place placeMSC=new Place("Москва");
+        userKevGen.addNewPlace(placeMSC);
+        placeService.addPlace(placeMSC);
+        userService.addUserIfNotExistByChatId(userKevGen);
+        userKevGen = userService.deleteAllLinksWithPlaces(userKevGen);
+        userService.updateUser(userKevGen);
+
+    }
+
+    @Test
+    public void testAddDublicatePlaces(){
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
+        PlaceServiceImpl placeService = context.getBean(PlaceServiceImpl.class);
+        UserServiceImpl userService = context.getBean(UserServiceImpl.class);
+
+        RequesterDataFromDBOrOpenWeatherMap requesterDataFromDBOrOpenWeatherMap = context.getBean(RequesterDataFromDBOrOpenWeatherMap.class);
+
+        User userKevGen = new User("KevGen",1L);
+        userService.addUserIfNotExistByChatId(userKevGen);
+        Place placeMSC=new Place("Москва");
+        Place placeSPB=new Place("Санкт-Петербург");
+        Place placeChelyaba = new Place("Челябинск");
+
+        placeService.addPlace(placeMSC);
+        placeService.addPlace(placeChelyaba);
+        placeService.addPlace(placeSPB);
+
+        userKevGen.addNewPlace(placeMSC);
+        userKevGen.addNewPlace(placeSPB);
+        userKevGen.addNewPlace(placeChelyaba);
+        userService.updateUser(userKevGen);
+
+        userKevGen= userService.deleteAllLinksWithPlaces(userKevGen);
+        //userKevGen= userService.updateUser(userKevGen);                    // Если это оставить он работает некорректно
+        try {
+            placeMSC = requesterDataFromDBOrOpenWeatherMap.getPlaceIfExist("Москва");
+            userKevGen.addNewPlace(placeMSC);
+            userService.updateUser(userKevGen);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            placeChelyaba = requesterDataFromDBOrOpenWeatherMap.getPlaceIfExist("Челябинск");
+            userKevGen.addNewPlace(placeChelyaba);
+            userService.updateUser(userKevGen);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        try {
+            Place placePerm = requesterDataFromDBOrOpenWeatherMap.getPlaceIfExist("Пермь");
+            userKevGen.addNewPlace(placePerm);
+            userService.updateUser(userKevGen);
+        }
+        catch (Exception e){
+                System.out.println(e.getMessage());
+        }
+
+
+
+        try {
+            Place placePerm1 = requesterDataFromDBOrOpenWeatherMap.getPlaceIfExist("Пермь");
+            userKevGen.addNewPlace(placePerm1);
+            userService.updateUser(userKevGen);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            Place placePerm2 = requesterDataFromDBOrOpenWeatherMap.getPlaceIfExist("Пермь");
+            userKevGen.addNewPlace(placePerm2);
+            userService.updateUser(userKevGen);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            Place placePerm3 = requesterDataFromDBOrOpenWeatherMap.getPlaceIfExist("Пермь");
+            userKevGen.addNewPlace(placePerm3);
+            userService.updateUser(userKevGen);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+
+    }
 
 }

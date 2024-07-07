@@ -22,6 +22,7 @@ import ru.spring.core.project.entity.Place;
 import ru.spring.core.project.entity.User;
 import ru.spring.core.project.entity.WeatherData;
 import ru.spring.core.project.statemachine.BotState;
+import ru.spring.core.project.weatherCommunication.CoordinateForWeatherBot;
 import ru.spring.core.project.weatherCommunication.WeatherRequestHandler;
 import ru.spring.core.project.utils.ResponseWeatherForecastGenerator;
 
@@ -99,7 +100,7 @@ public class Bot extends TelegramLongPollingBot {
             handleLocation(update);
         }
         else{
-
+            errorIncorrectMessege(update);
         }
     }
 
@@ -177,10 +178,10 @@ public class Bot extends TelegramLongPollingBot {
     private void handleLocation(Update update){
         Location location = update.getMessage().getLocation();
         if(currentState==BotState.AFTER_START){
-            //correctReceiveLocationHandle(update);
+            correctReceiveLocationHandle(update);
         }
         else{
-            //errorIncorrectReceiveLocationHandle(update);
+            errorIncorrectReceiveLocationHandle(update);
         }
     }
 
@@ -238,16 +239,16 @@ public class Bot extends TelegramLongPollingBot {
     }
     private void helpHandle(Update update){
         long chatId = update.getMessage().getChatId();
-        String response = "*Функционал бота:*\n"+
-                "__Для выполнения запроса нужно отправить название города или локацию__.\n "+
-                "~После этого будет предложено выбрать опцию показа погоды~"+
-                "_Доступен просмотр погоды на периоды:_\n"+
+        String response = "*Функционал бота:*\n\n"+
+                "Для выполнения запроса нужно отправить название города или локацию.\n"+
+                "После этого будет предложено выбрать опцию показа погоды\n\n"+
+                "*Доступен просмотр погоды на периоды:*\n"+
                 "Сейчас\n"+
                 "Сегодня\n"+
                 "На два дня\n"+
                 "На три дня\n"+
-                "На пять дней\n"+
-                "Кроме этого доступно:\n"+
+                "На пять дней\n\n"+
+                "*Кроме этого можно:*\n"+
                 "Нажать /start - чтобы поздороваться;\n"+
                 "Нажать /show - чтобы вывести списком все сохраненные города;\n"+
                 "Нажать /clear - чтобы очистить сохраненные данные;\n"+
@@ -295,8 +296,6 @@ public class Bot extends TelegramLongPollingBot {
     }
     private void forecastNDayHandle(Update update, int amountDays){
         long chatId = update.getMessage().getChatId();
-        String response1 = "N = "+(amountDays+1);
-
         try {
             List<WeatherData> listOfWeatherData = requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(currentPlace,amountDays);
             List<String> listOfMessage = responseWeatherForecastGenerator.getResponseByListOfWeatherData(listOfWeatherData);
@@ -308,16 +307,22 @@ public class Bot extends TelegramLongPollingBot {
             String response ="Неизвестная ошибка на стороне сервера. Попробуйте заново.";
             sendMessage(chatId,response);
         }
-        sendMessage(chatId,response1);
         changeBotState(BotState.AFTER_START);
     }
 
 
     private void clearYesHandle(Update update){
         long chatId = update.getMessage().getChatId();
-        String response = "Сейчас очистим.";
-        sendMessage(chatId,response);
-        placeService.deleteAllLinkedUserByChatId(chatId);
+        String response = "";
+        if(currentUser.getListOfPlaces()== null || currentUser.getListOfPlaces().isEmpty()){
+            response = "У вас пока нет сохраненных мест.";
+            changeBotState(BotState.AFTER_START);
+            sendMessage(chatId,response);
+            return ;
+        }
+        currentUser = userService.deleteAllLinksWithPlaces(currentUser);
+        //currentUser = userService.updateUser(currentUser);
+        userService.updateUser(currentUser);
         response = "Ваша история поиска очищена.";
         sendMessage(chatId,response);
         changeBotState(BotState.AFTER_START);
@@ -328,6 +333,40 @@ public class Bot extends TelegramLongPollingBot {
         sendMessage(chatId,response);
         changeBotState(BotState.AFTER_START);
     }
+    private void correctReceiveLocationHandle(Update update){
+        long chatId = update.getMessage().getChatId();
+        double latitude = update.getMessage().getLocation().getLatitude();
+        double longitude = update.getMessage().getLocation().getLongitude();
+        CoordinateForWeatherBot coordinateForWeatherBot = new CoordinateForWeatherBot(latitude,longitude);
+        String response = Double.toString(latitude)+" "+Double.toString(longitude);
+        sendMessage(chatId,response);
+        response = "Выберете период:\n" +
+                "/now\n"+
+                "/today\n" +
+                "/2days\n" +
+                "/3days\n" +
+                "/5days\n";
+        sendMessage(chatId,response);
+        currentPlace = new Place(coordinateForWeatherBot);
+        changeBotState(BotState.SENT_CITY_NAME_OR_LOCATION);
+    }
+
+    private void errorIncorrectReceiveLocationHandle(Update update){
+        long chatId = update.getMessage().getChatId();
+        String response = "Ошибка при обработке локации. Отправка локации не ожидается в этом состоянии.";
+        sendMessage(chatId,response);
+        changeBotState(BotState.AFTER_START);
+        sendInfoAfterStartMessege(chatId);
+    }
+    private void errorIncorrectMessege(Update update){
+        long chatId = update.getMessage().getChatId();
+        String response = "Получено некорректное сообщение. Попробуйте заново.";
+        sendMessage(chatId,response);
+        changeBotState(BotState.AFTER_START);
+        sendInfoAfterStartMessege(chatId);
+    }
+
+
     private void sendInfoAfterStartMessege(long chatId){
         String response= "Отправьте мне название города или локацию, чтобы узнать погоду."+
                 "\n **Чтобы посмотреть, что я умею**  - нажмите /help.";

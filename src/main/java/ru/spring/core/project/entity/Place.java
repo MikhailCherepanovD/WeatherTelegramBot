@@ -72,6 +72,7 @@ public class Place {
     }
     public Place(CoordinateForWeatherBot coordinateForWeatherBot){
         this.coordinate=coordinateForWeatherBot;
+        placeName = new String();
     }
 
     @Override
@@ -112,18 +113,17 @@ public class Place {
     public void addUser(User user){
         if(listOfUser ==null)
             listOfUser =new ArrayList<>();
+        if(listOfUser.contains(user))
+            return;
         listOfUser.add(user);
     }
     protected void removeUser(User user){
-        //setOfUser.remove(user);
-        float hash1 = user.hashCode();
-        float hash2;
-        for(User user1 : listOfUser){
-           if(user1.equals(user)){
-               listOfUser.remove(user1);
-           }
+        listOfUser.remove(user);
+    }
+    public boolean placeNameIsNull(){
+        if(placeName == null){
+            return true;
         }
-        int h=1;
-
+        return false;
     }
 }

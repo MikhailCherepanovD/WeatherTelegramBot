@@ -98,4 +98,12 @@ public class User {
         listOfPlaces.remove(place);
         place.removeUser(this);
     }
+    public void removeAllPlaces(){
+        if(listOfPlaces.isEmpty())
+            return;
+        for( Place place : listOfPlaces){
+            place.removeUser(this);
+        }
+        listOfPlaces.clear();
+    }
 }
