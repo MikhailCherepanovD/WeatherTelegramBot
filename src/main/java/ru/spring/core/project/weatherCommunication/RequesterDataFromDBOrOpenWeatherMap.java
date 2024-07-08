@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import ru.spring.core.project.DBService.impl.PlaceServiceImpl;
-import ru.spring.core.project.DBService.impl.WeatherDataImpl;
+import ru.spring.core.project.DBService.impl.WeatherDataServiceImpl;
 import ru.spring.core.project.entity.Place;
 import ru.spring.core.project.entity.WeatherData;
 
@@ -27,7 +27,7 @@ public class RequesterDataFromDBOrOpenWeatherMap {
     }
 
     public List<WeatherData> getWeatherDataByPlaceNDay(Place place, int amountDays) throws Exception {
-        WeatherDataImpl weatherDataService = context.getBean(WeatherDataImpl.class);
+        WeatherDataServiceImpl weatherDataService = context.getBean(WeatherDataServiceImpl.class);
         LocalDate currDate =  LocalDate.now();
         LocalTime currTime =  LocalTime.now();
         List<WeatherData> ans = new ArrayList<>();
@@ -59,7 +59,7 @@ public class RequesterDataFromDBOrOpenWeatherMap {
 
 
     public WeatherData getWeatherDataByPlaceNow(Place place) throws Exception {
-        WeatherDataImpl weatherDataService = context.getBean(WeatherDataImpl.class);
+        WeatherDataServiceImpl weatherDataService = context.getBean(WeatherDataServiceImpl.class);
         LocalDate currDate =  LocalDate.now();
         LocalTime currTime =  LocalTime.now();
         WeatherData ans;

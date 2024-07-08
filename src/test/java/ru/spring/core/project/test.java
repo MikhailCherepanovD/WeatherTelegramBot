@@ -8,7 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.spring.core.project.weatherCommunication.RequesterDataFromDBOrOpenWeatherMap;
 import ru.spring.core.project.DBService.impl.PlaceServiceImpl;
 import ru.spring.core.project.DBService.impl.UserServiceImpl;
-import ru.spring.core.project.DBService.impl.WeatherDataImpl;
+import ru.spring.core.project.DBService.impl.WeatherDataServiceImpl;
 import ru.spring.core.project.entity.Place;
 import ru.spring.core.project.entity.User;
 import ru.spring.core.project.entity.WeatherData;
@@ -119,7 +119,7 @@ public class test {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
         PlaceServiceImpl placeService = context.getBean(PlaceServiceImpl.class);
         UserServiceImpl userService = context.getBean(UserServiceImpl.class);
-        WeatherDataImpl weatherDataService = context.getBean(WeatherDataImpl.class);
+        WeatherDataServiceImpl weatherDataService = context.getBean(WeatherDataServiceImpl.class);
         RequesterDataFromDBOrOpenWeatherMap requesterDataFromDBOrOpenWeatherMap = context.getBean(RequesterDataFromDBOrOpenWeatherMap.class);
 
         User userKevGen = new User("KevGen",1L);
@@ -237,7 +237,7 @@ public class test {
     @Test
     public void testGettingFromDB() throws Exception {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
-        WeatherDataImpl weatherDataService = context.getBean(WeatherDataImpl.class);
+        WeatherDataServiceImpl weatherDataService = context.getBean(WeatherDataServiceImpl.class);
         LocalDate currDate =  LocalDate.now();
         LocalTime currTime =  LocalTime.now();
         List<WeatherData> ans = new ArrayList<>();
