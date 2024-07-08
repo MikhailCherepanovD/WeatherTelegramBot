@@ -11,6 +11,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+
+    @OneToOne(fetch = FetchType.EAGER,mappedBy = "user", cascade = CascadeType.ALL )
+    private UserState userState;
+
     @Column(name = "USER_NAME")
     private String userName;
 
@@ -54,6 +58,12 @@ public class User {
     public void setChatId(Long chatId) {
         this.chatId = chatId;
     }
+
+    public UserState getUserState() { return userState; }
+
+    public void setUserState(UserState userState) { this.userState = userState; }
+
+    public void setChatId(long chatId) { this.chatId = chatId; }
 
     public User(){
 

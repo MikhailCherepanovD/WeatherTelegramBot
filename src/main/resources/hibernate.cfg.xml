@@ -19,6 +19,7 @@
         <mapping class="ru.spring.core.project.entity.User"></mapping>
         <mapping class="ru.spring.core.project.entity.Place"></mapping>
         <mapping class="ru.spring.core.project.entity.WeatherData"></mapping>
+        <mapping class="ru.spring.core.project.entity.USerState"></mapping>
 
     </session-factory>
 </hibernate-configuration>

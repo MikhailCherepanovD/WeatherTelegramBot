@@ -13,6 +13,8 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.spring.core.project.DBService.impl.UserStateServiceImpl;
+import ru.spring.core.project.entity.UserState;
 import ru.spring.core.project.weatherCommunication.RequesterDataFromDBOrOpenWeatherMap;
 import ru.spring.core.project.DBService.impl.PlaceServiceImpl;
 import ru.spring.core.project.DBService.impl.UserServiceImpl;
@@ -41,9 +43,6 @@ public class Bot extends TelegramLongPollingBot {
     @Autowired
     private RequesterDataFromDBOrOpenWeatherMap requesterDataFromDBOrOpenWeatherMap;
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
-    private BotState currentState = BotState.BEFORE_START;
-    private User currentUser = new User();
-    private Place currentPlace = new Place();
     private ClassPathXmlApplicationContext context;
     @Autowired
     private UserServiceImpl userService;
@@ -53,6 +52,9 @@ public class Bot extends TelegramLongPollingBot {
 
     @Autowired
     private WeatherDataImpl wheatherDataService;
+
+    @Autowired
+    private UserStateServiceImpl userStateService;
     @Autowired
     private ResponseWeatherForecastGenerator responseWeatherForecastGenerator;
 
@@ -89,21 +91,31 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {   // переходы по состояниям КА
+        Long chatId = update.getMessage().getChatId();
+        List<User> listOfUsers = userService.getUsersByChatId(chatId);
+        BotState currentState;
+        if(listOfUsers.isEmpty()){// первое сообщение от пользователя
+            currentState = BotState.BEFORE_START;
+        }
+        else{ // не первое
+            currentState = listOfUsers.get(0).getUserState().getCurrentState();
+        }
+
         logger.info("Обновление в состоянии : "+currentState.toString()+
                         " Пришло сообщение:" +update.getMessage().getText(),
-                update.getMessage().getChatId() );
+                chatId );
         if(update.hasMessage() && update.getMessage().hasText()){
-            handleMessege(update);
+            handleMessege(update,currentState);
         }
         else if (update.getMessage().hasLocation()) {
-            handleLocation(update);
+            handleLocation(update,currentState);
         }
         else{
-            errorIncorrectMessege(update);
+            errorAfterStartHandle(update,2);
         }
     }
     //Реализация Конечного автомата
-    private void handleMessege(Update update){
+    private void handleMessege(Update update,BotState currentState){
         String message = update.getMessage().getText();
         if(currentState==BotState.BEFORE_START){
             switch (message){
@@ -153,7 +165,7 @@ public class Bot extends TelegramLongPollingBot {
                     forecastNDayHandle(update,4);
                     break;
                 default:
-                    errorInputIncorrectOptionHandle(update);
+                    errorAfterStartHandle(update,0);
                     break;
             }
         }
@@ -166,7 +178,7 @@ public class Bot extends TelegramLongPollingBot {
                     clearNoHandle(update);
                     break;
                 default:
-                    errorInputIncorrectOptionHandle(update);
+                    errorAfterStartHandle(update,0);
                     break;
 
             }
@@ -174,13 +186,13 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
-    private void handleLocation(Update update){
+    private void handleLocation(Update update,BotState currentState){
         Location location = update.getMessage().getLocation();
         if(currentState==BotState.AFTER_START){
             correctReceiveLocationHandle(update);
         }
         else{
-            errorIncorrectReceiveLocationHandle(update);
+            errorAfterStartHandle(update,1);
         }
     }
 
@@ -192,17 +204,28 @@ public class Bot extends TelegramLongPollingBot {
         sendMessage(chatId, response);
         sendInfoAfterStartMessege(chatId);
         User newUser= new User(userName,chatId);
-        currentUser = userService.addUserIfNotExistByChatId(newUser);
-        changeBotState(BotState.AFTER_START);
+        UserState userState = new UserState(newUser,BotState.AFTER_START);
+        userService.addUserIfNotExistByChatId(newUser);
+        userStateService.addUserState(userState);
     }
 
     private void clearHandle(Update update){
         long chatId = update.getMessage().getChatId();
+        User currentUser;
+        try {
+            currentUser = userService.getUsersByChatId(chatId).get(0);
+        }
+        catch (Exception e){
+            sendMessage(chatId,"Ошибка на стороне сервера. Не можем найти запись о Вас в базе данных");
+            return;
+        }
+        UserState userState = currentUser.getUserState();
         String response ="Вы уверены, что хотите очистить все данные о вас?"+
                 "\n/yes"+
                 "\n/no";
         sendMessage(chatId, response);
-        changeBotState(BotState.START_CLEARING);
+        userState.setCurrentState(BotState.START_CLEARING);
+        userStateService.updateUserState(userState);
     }
     private void showHandle(Update update){
         long chatId = update.getMessage().getChatId();
@@ -235,7 +258,7 @@ public class Bot extends TelegramLongPollingBot {
                 "Нажать /start - чтобы поздороваться;\n"+
                 "Нажать /show - чтобы вывести списком все сохраненные города;\n"+
                 "Нажать /clear - чтобы очистить сохраненные данные;\n"+
-                "Нажать /help - чтобы показать это сообщение";
+                "Нажать /help - чтобы показать это сообщение.";
         sendMessage(chatId,response);
     }
     private void cityNameHandle(Update update){
@@ -245,17 +268,29 @@ public class Bot extends TelegramLongPollingBot {
             messege = messege.substring(1);
         }
         String response;
+        User currentUser;
+        try {
+            currentUser = userService.getUsersByChatId(chatId).get(0);
+        }
+        catch (Exception e){
+            sendMessage(chatId,"Ошибка на стороне сервера. Не можем найти запись о Вас в базе данных");
+            return;
+        }
+
         try{
-            currentPlace = requesterDataFromDBOrOpenWeatherMap.getPlaceIfExist(messege);
+            Place currentPlace = requesterDataFromDBOrOpenWeatherMap.getPlaceIfExist(messege);
             currentUser.addNewPlace(currentPlace);
+            UserState userState = currentUser.getUserState();
+            userState.setCurrentPlace(currentPlace);
+            userState.setCurrentState(BotState.SENT_CITY_NAME_OR_LOCATION);
             userService.updateUser(currentUser);
+            userStateService.updateUserState(userState);
             response = "Выберете период:\n" +
                     "/now\n"+
                     "/today\n" +
                     "/2days\n" +
                     "/3days\n" +
                     "/5days\n";
-            changeBotState(BotState.SENT_CITY_NAME_OR_LOCATION);
         }catch (Exception e){
             response = MessageFormat.format("Города {0} нет в нашей базе(", messege);
         }
@@ -264,6 +299,16 @@ public class Bot extends TelegramLongPollingBot {
 
     private void forecastNowHandle(Update update){
         long chatId = update.getMessage().getChatId();
+        User currentUser;
+        try {
+            currentUser = userService.getUsersByChatId(chatId).get(0);
+        }
+        catch (Exception e){
+            sendMessage(chatId,"Ошибка на стороне сервера. Не можем найти запись о Вас в базе данных");
+            return;
+        }
+        UserState userState = currentUser.getUserState();
+        Place currentPlace = userState.getCurrentPlace();
         try {
 
             WeatherData weatherData = requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNow(currentPlace);
@@ -275,10 +320,24 @@ public class Bot extends TelegramLongPollingBot {
             String response ="Неизвестная ошибка на стороне сервера. Попробуйте заново.";
             sendMessage(chatId,response);
         }
-        changeBotState(BotState.AFTER_START);
+        userState.setCurrentState(BotState.AFTER_START);
+        userStateService.updateUserState(userState);
     }
+
+    // эта функция отличается от предыдущей только вызовом NDaysForecast и ResponseByListOfWeatherData
     private void forecastNDayHandle(Update update, int amountDays){
         long chatId = update.getMessage().getChatId();
+        User currentUser;
+        try {
+            currentUser = userService.getUsersByChatId(chatId).get(0);
+        }
+        catch (Exception e){
+            sendMessage(chatId,"Ошибка на стороне сервера. Не можем найти запись о Вас в базе данных");
+            return;
+        }
+        UserState userState = currentUser.getUserState();
+        Place currentPlace = userState.getCurrentPlace();
+
         try {
             List<WeatherData> listOfWeatherData = requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(currentPlace,amountDays);
             List<String> listOfMessage = responseWeatherForecastGenerator.getResponseByListOfWeatherData(listOfWeatherData);
@@ -290,34 +349,63 @@ public class Bot extends TelegramLongPollingBot {
             String response ="Неизвестная ошибка на стороне сервера. Попробуйте заново.";
             sendMessage(chatId,response);
         }
-        changeBotState(BotState.AFTER_START);
+        userState.setCurrentState(BotState.AFTER_START);
+        userStateService.updateUserState(userState);
     }
 
 
     private void clearYesHandle(Update update){
         long chatId = update.getMessage().getChatId();
+        User currentUser;
+        try {
+            currentUser = userService.getUsersByChatId(chatId).get(0);
+        }
+        catch (Exception e){
+            sendMessage(chatId,"Ошибка на стороне сервера. Не можем найти запись о Вас в базе данных");
+            return;
+        }
+        UserState userState = currentUser.getUserState();
+        userState.setCurrentState(BotState.AFTER_START);
+        userStateService.updateUserState(userState);
         String response = "";
         if(currentUser.getListOfPlaces()== null || currentUser.getListOfPlaces().isEmpty()){
             response = "У вас пока нет сохраненных мест.";
-            changeBotState(BotState.AFTER_START);
             sendMessage(chatId,response);
             return ;
         }
         currentUser = userService.deleteAllLinksWithPlaces(currentUser);
-        //currentUser = userService.updateUser(currentUser);
+        //currentUser = userService.updateUser(currentUser);                             // если так делать была ошибка
         userService.updateUser(currentUser);
         response = "Ваша история поиска очищена.";
         sendMessage(chatId,response);
-        changeBotState(BotState.AFTER_START);
     }
     private void clearNoHandle(Update update){
         long chatId = update.getMessage().getChatId();
+        User currentUser;
+        try {
+            currentUser = userService.getUsersByChatId(chatId).get(0);
+        }
+        catch (Exception e){
+            sendMessage(chatId,"Ошибка на стороне сервера. Не можем найти запись о Вас в базе данных");
+            return;
+        }
+        UserState userState = currentUser.getUserState();
+        userState.setCurrentState(BotState.AFTER_START);
+        userStateService.updateUserState(userState);
+
         String response = "Окей, не очищаем.";
         sendMessage(chatId,response);
-        changeBotState(BotState.AFTER_START);
     }
     private void correctReceiveLocationHandle(Update update){
         long chatId = update.getMessage().getChatId();
+        User currentUser;
+        try {
+            currentUser = userService.getUsersByChatId(chatId).get(0);
+        }
+        catch (Exception e){
+            sendMessage(chatId,"Ошибка на стороне сервера. Не можем найти запись о Вас в базе данных");
+            return;
+        }
         double latitude = update.getMessage().getLocation().getLatitude();
         double longitude = update.getMessage().getLocation().getLongitude();
         CoordinateForWeatherBot coordinateForWeatherBot = new CoordinateForWeatherBot(latitude,longitude);
@@ -330,8 +418,11 @@ public class Bot extends TelegramLongPollingBot {
                 "/3days\n" +
                 "/5days\n";
         sendMessage(chatId,response);
-        currentPlace = new Place(coordinateForWeatherBot);
-        changeBotState(BotState.SENT_CITY_NAME_OR_LOCATION);
+        UserState userState = currentUser.getUserState();
+        Place currentPlace = new Place(coordinateForWeatherBot);
+        userState.setCurrentPlace(currentPlace);
+        userState.setCurrentState(BotState.SENT_CITY_NAME_OR_LOCATION);
+        userStateService.updateUserState(userState);
     }
 
     //Сообщения об ошибках
@@ -340,27 +431,41 @@ public class Bot extends TelegramLongPollingBot {
         String response ="Нажмите /start чтобы начать общение.";
         sendMessage(chatId, response);
     }
-    private void errorInputIncorrectOptionHandle(Update update){
+    /*
+    * option = 0 - введена некорректная опция
+    * option = 1 - ошибка при обработке локации
+    * option = 2 - полученно некорректное сообщение(например фото)*/
+    private void errorAfterStartHandle(Update update, int option){
         long chatId = update.getMessage().getChatId();
-        String response ="Вы ввели некорректную опцию. Начните заново.";
+        User currentUser;
+        try {
+            currentUser = userService.getUsersByChatId(chatId).get(0);
+        }
+        catch (Exception e){
+            sendMessage(chatId,"Ошибка на стороне сервера. Не можем найти запись о Вас в базе данных");
+            return;
+        }
+        UserState userState = currentUser.getUserState();
+        String response ="";
+        switch (option){
+            case 0:
+                response ="Вы ввели некорректную опцию. Начните заново.";
+                break;
+            case 1:
+                response = "Ошибка при обработке локации. Отправка локации не ожидается в этом состоянии.";
+                break;
+            case 2:
+                response = "Получено некорректное сообщение. Попробуйте заново.";
+                break;
+            default:
+                response = "Ошибка при обработке ошибок на стороне сервера) Попробуйте заново.";
+                break;
+        }
         sendMessage(chatId, response);
         sendInfoAfterStartMessege(chatId);
-        changeBotState(BotState.AFTER_START);
+        userState.setCurrentState(BotState.AFTER_START);
+        userStateService.updateUserState(userState);
 
-    }
-    private void errorIncorrectReceiveLocationHandle(Update update){
-        long chatId = update.getMessage().getChatId();
-        String response = "Ошибка при обработке локации. Отправка локации не ожидается в этом состоянии.";
-        sendMessage(chatId,response);
-        changeBotState(BotState.AFTER_START);
-        sendInfoAfterStartMessege(chatId);
-    }
-    private void errorIncorrectMessege(Update update){
-        long chatId = update.getMessage().getChatId();
-        String response = "Получено некорректное сообщение. Попробуйте заново.";
-        sendMessage(chatId,response);
-        changeBotState(BotState.AFTER_START);
-        sendInfoAfterStartMessege(chatId);
     }
 
 
@@ -383,13 +488,5 @@ public class Bot extends TelegramLongPollingBot {
             logger.error("Error sending message to user {}", chatId, e); // Логируем ошибку, если не удалось отправить сообщение
         }
     }
-
-
-    private void changeBotState(BotState newState) {
-        logger.info("Bot state changed to {}", newState);
-        this.currentState = newState;
-    }
-
-
 
 }

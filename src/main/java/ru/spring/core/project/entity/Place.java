@@ -19,6 +19,9 @@ public class Place {
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "place", cascade = CascadeType.ALL )
     private List<WeatherData> listOfWeatherData;
 
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "currentPlace", cascade = CascadeType.ALL )
+    private List<UserState> listOfUserState;
+
     @ManyToMany(mappedBy = "listOfPlaces", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<User> listOfUser;
 
