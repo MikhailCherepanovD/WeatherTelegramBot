@@ -114,63 +114,6 @@ public class DatabaseTest {
 
 
     }
-    @Test
-    public void testDBService() throws Exception {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
-        PlaceServiceImpl placeService = context.getBean(PlaceServiceImpl.class);
-        UserServiceImpl userService = context.getBean(UserServiceImpl.class);
-        WeatherDataServiceImpl weatherDataService = context.getBean(WeatherDataServiceImpl.class);
-        RequesterDataFromDBOrOpenWeatherMap requesterDataFromDBOrOpenWeatherMap = context.getBean(RequesterDataFromDBOrOpenWeatherMap.class);
-
-        User userKevGen = new User("KevGen",1L);
-        userService.addUserIfNotExistByChatId(userKevGen);
-
-        User userCherep = new User("Cherep",2L);
-
-
-        Place placeSPB=new Place("Санкт-Петербург");
-        Place placeMoscow=new Place("Москва");
-        Place placeChelybinsk=new Place("Челябинск");
-        placeService.addPlace(placeSPB);
-        placeService.addPlace(placeChelybinsk);
-        placeService.addPlace(placeMoscow);
-
-        userKevGen.addNewPlace(placeSPB);
-        userKevGen.addNewPlace(placeMoscow);
-        userKevGen.addNewPlace(placeChelybinsk);
-
-        userService.addUserIfNotExistByChatId(userKevGen);
-
-
-        userCherep.addNewPlace(placeSPB);
-        userCherep.addNewPlace(placeMoscow);
-        userCherep.addNewPlace(placeChelybinsk);
-
-        userService.addUserIfNotExistByChatId(userCherep);
-
-        List<WeatherData> weatherChelyabinsk = new ArrayList<>(requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeChelybinsk, 5));
-        List<WeatherData> weatherSPB = new ArrayList<>(requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeSPB, 5));
-        List<WeatherData> weatherMoskow = new ArrayList<>(requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeMoscow, 5));
-
-        for(WeatherData wd: weatherChelyabinsk ){
-            wd.setPlace(placeChelybinsk);
-            weatherDataService.addWeatherData(wd);
-            System.out.println(wd.toString());
-
-        }
-        for(WeatherData wd: weatherMoskow ){
-            wd.setPlace(placeMoscow);
-            weatherDataService.addWeatherData(wd);
-        }
-        for(WeatherData wd: weatherSPB ){
-            wd.setPlace(placeSPB);
-            weatherDataService.addWeatherData(wd);
-        }
-
-
-
-
-    }
 
     @Test
     public void testWeatherRequestHandler() throws Exception {
@@ -180,47 +123,6 @@ public class DatabaseTest {
         for(WeatherData wd: weatherSPB ){
             System.out.println(wd.toString());
         }
-    }
-
-    @Test
-    public void testRequesterDataFromDBOrOpenWeatherMap() throws Exception {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
-        PlaceServiceImpl placeService = context.getBean(PlaceServiceImpl.class);
-        UserServiceImpl userService = context.getBean(UserServiceImpl.class);
-        RequesterDataFromDBOrOpenWeatherMap requesterDataFromDBOrOpenWeatherMap = context.getBean(RequesterDataFromDBOrOpenWeatherMap.class);
-
-        User userKevGen = new User("KevGen",1L);
-        userService.addUserIfNotExistByChatId(userKevGen);
-
-        User userCherep = new User("Cherep",2L);
-
-
-        Place placeSPB=new Place("Санкт-Петербург");
-        Place placeMoscow=new Place("Москва");
-        Place placeChelybinsk=new Place("Челябинск");
-        placeService.addPlace(placeSPB);
-        placeService.addPlace(placeChelybinsk);
-        placeService.addPlace(placeMoscow);
-
-        userKevGen.addNewPlace(placeSPB);
-        userKevGen.addNewPlace(placeMoscow);
-        userKevGen.addNewPlace(placeChelybinsk);
-
-        userService.addUserIfNotExistByChatId(userKevGen);
-
-
-        userCherep.addNewPlace(placeSPB);
-        userCherep.addNewPlace(placeMoscow);
-        userCherep.addNewPlace(placeChelybinsk);
-
-        userService.addUserIfNotExistByChatId(userCherep);
-        //requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeSPB,5);
-        List<WeatherData> lwd =requesterDataFromDBOrOpenWeatherMap.getWeatherDataByPlaceNDay(placeSPB,0);
-        for(WeatherData wd: lwd){
-            System.out.println(wd.toString());
-        }
-
-
     }
 
 

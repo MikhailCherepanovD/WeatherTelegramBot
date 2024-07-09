@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.spring.core.project.DBService.impl.PlaceServiceImpl;
 import ru.spring.core.project.entity.Place;
-import ru.spring.core.project.service.Bot;
+import ru.spring.core.project.service.WeatherBot;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MultiUserTest {
     ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("META-INF/applicationContext.xml");
-    Bot bot = context.getBean(Bot.class);
+    WeatherBot bot = context.getBean(WeatherBot.class);
 
     PlaceServiceImpl placeService = context.getBean(PlaceServiceImpl.class);
     String[] cities = {

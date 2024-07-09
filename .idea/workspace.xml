@@ -5,23 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6ed9d13b-f1fb-452d-bf38-2e32284bd08a" name="Changes" comment="Add first logic DB">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/Cache/ThreadSave.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/Cache/ThreadUpdate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/MultiUserTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/SingleUserTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/file:/home/mikhail/Разработка/6_sem/java/Weather-Bot/src/main/resources/logs/your_log_file.log" beforeDir="false" afterPath="$PROJECT_DIR$/file:/home/mikhail/Разработка/6_sem/java/Weather-Bot/src/main/resources/logs/your_log_file.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/Cache/LRUCacheAndBDCommunication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/Cache/LRUCacheAndBDCommunication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/UserStateServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/DBService/impl/UserStateServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/config/BotConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/config/BotConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/Place.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/Place.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Properties/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Configuration/hibernate.cfg.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Configuration/logback.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/DatabaseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/WatherBot_jar/WatherBot.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/config/BotInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/config/BotInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/WeatherData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/entity/WeatherData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/spring/core/project/service/WeatherBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/DatabaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/DatabaseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/MultiUserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/MultiUserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/SingleUserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/spring/core/project/SingleUserTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,10 +87,13 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/main/resources/Properties" />
+      <recent name="$PROJECT_DIR$/src/main/resources/Configuration" />
       <recent name="$PROJECT_DIR$/src/main/resources/META-INF" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.MultiUserTest.telegrammCommunicateTest">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ru.spring.core.project.Main" />
       <module name="WatherBot" />
@@ -109,6 +103,21 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DatabaseTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="WatherBot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.spring.core.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.spring.core.project" />
+      <option name="MAIN_CLASS_NAME" value="ru.spring.core.project.DatabaseTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -160,29 +169,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SingleUserTest.telegrammCommunicateTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="WatherBot" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ru.spring.core.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ru.spring.core.project" />
-      <option name="MAIN_CLASS_NAME" value="ru.spring.core.project.SingleUserTest" />
-      <option name="METHOD_NAME" value="telegrammCommunicateTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.MultiUserTest.telegrammCommunicateTest" />
-        <item itemvalue="JUnit.SingleUserTest" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="JUnit.SingleUserTest.telegrammCommunicateTest" />
+        <item itemvalue="JUnit.DatabaseTest" />
         <item itemvalue="JUnit.DatabaseTest.testDBService" />
+        <item itemvalue="JUnit.SingleUserTest" />
+        <item itemvalue="JUnit.MultiUserTest.telegrammCommunicateTest" />
       </list>
     </recent_temporary>
   </component>
@@ -239,22 +232,22 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/ru/spring/core/project/DatabaseTest.java</url>
-          <line>243</line>
+          <line>145</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/ru/spring/core/project/DatabaseTest.java</url>
-          <line>293</line>
+          <line>195</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/ru/spring/core/project/DatabaseTest.java</url>
-          <line>363</line>
+          <line>265</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/ru/spring/core/project/DatabaseTest.java</url>
-          <line>382</line>
+          <line>284</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -274,7 +267,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/Cache/ThreadUpdate.java</url>
-          <line>27</line>
+          <line>18</line>
           <option name="timeStamp" value="98" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -284,7 +277,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/ru/spring/core/project/Cache/LRUCacheAndBDCommunication.java</url>
-          <line>47</line>
+          <line>42</line>
           <option name="timeStamp" value="119" />
         </line-breakpoint>
       </breakpoints>

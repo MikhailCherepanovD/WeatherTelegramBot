@@ -12,24 +12,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "WEATHER_DATA")
 public class WeatherData {
-/*
-    double latitude; // удалить
-    double longitude; //удалить
-    String cityName; // надо будет удалить
-    public void setLatitude(double latitude) { this.latitude = latitude; }
-    public void setLongitude(double longitude) { this.longitude = longitude; }
-
-    public double getLatitude() { return latitude; }
-    public double getLongitude() { return longitude; }
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-    public String getCityName() {
-        return cityName;
-    }
-*/
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -208,14 +190,7 @@ public class WeatherData {
                 + "\n" + "Description of the weather: " + weatherStateDescription;
         return response;
     }
-
-
-
-
     public WeatherData(){
 
     };
-
-
-
 }
