@@ -263,13 +263,17 @@ public class Bot extends TelegramLongPollingBot {
     private void cityNameHandle(Update update,User currentUser){
         long chatId = update.getMessage().getChatId();
         String messege = update.getMessage().getText();
+        if(update.getMessage().getChatId()==1L){
+            int i=10;
+            i++;
+        }
         if(messege.charAt(0)=='/'){
             messege = messege.substring(1);
         }
         String response;
         try{
             Place currentPlace = requesterDataFromDBOrOpenWeatherMap.getPlaceIfExist(messege);
-            currentUser.addNewPlace(currentPlace);
+            //currentUser.addNewPlace(currentPlace);
             currentUser.getUserState().setCurrentState(BotState.SENT_CITY_NAME_OR_LOCATION);
             currentUser.getUserState().setCurrentPlace(currentPlace);
             lruCacheAndBDCommunication.updateUser(currentUser);
@@ -300,6 +304,7 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         currentUser.getUserState().setCurrentState(BotState.AFTER_START);
+        currentUser.addNewPlace(currentUser.getUserState().getCurrentPlace());
         lruCacheAndBDCommunication.updateUser(currentUser);
     }
 
@@ -320,6 +325,7 @@ public class Bot extends TelegramLongPollingBot {
             String response ="Неизвестная ошибка на стороне сервера. Попробуйте заново.";
             sendMessage(chatId,response);
         }
+        currentUser.addNewPlace(currentUser.getUserState().getCurrentPlace());
         currentUser.getUserState().setCurrentState(BotState.AFTER_START);
         lruCacheAndBDCommunication.updateUser(currentUser);
     }

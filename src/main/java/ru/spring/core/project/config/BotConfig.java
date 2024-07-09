@@ -3,6 +3,7 @@ package ru.spring.core.project.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 @Configuration
 @ComponentScan(basePackages = {"ru.spring.core.project"})
@@ -14,15 +15,9 @@ public class BotConfig {
     @Value("${botConfig.apiKey}")
      private String apiKey;
 
-    public String getOpenWeatherMapKey() {
-        return apiKey;
-    }
-
+    public String getOpenWeatherMapKey() { return apiKey; }
     public String getBotToken() {
         return botToken;
     }
-
-    public String getBotName() {
-        return botName;
-    }
+    public String getBotName() { return botName;}
 }

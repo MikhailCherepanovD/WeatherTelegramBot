@@ -20,18 +20,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUserIfNotExistByChatId(User user){
-        List<User> users = getUsersByChatId(user.getChatId());
-        if(!users.isEmpty()){
-            return users.get(0);
+        synchronized (this) {
+            List<User> users = getUsersByChatId(user.getChatId());
+            if (!users.isEmpty()) {
+                return users.get(0);
+            }
+            User savedUser = userRepository.saveAndFlush(user);
+            return savedUser;
         }
-        User savedUser =userRepository.saveAndFlush(user);
-
-        return savedUser;
     }
     @Override
     public User updateUser(User user){
-        User updatedUser =userRepository.save(user);
-        return updatedUser;
+        synchronized (this) {
+            User updatedUser = userRepository.save(user);
+            return updatedUser;
+        }
     }
 
     @Override

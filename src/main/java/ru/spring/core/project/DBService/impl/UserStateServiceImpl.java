@@ -12,13 +12,17 @@ public class UserStateServiceImpl implements UserStateService {
     UserStateRepository userStateRepository;
     @Override
     public  UserState addUserState(UserState userState){
-        UserState savedUserState = userState = userStateRepository.saveAndFlush(userState);
-        return savedUserState;
+        synchronized (this) {
+            UserState savedUserState = userState = userStateRepository.saveAndFlush(userState);
+            return savedUserState;
+        }
     }
 
     @Override
     public UserState updateUserState(UserState userState){
-        UserState savedUserState = userState = userStateRepository.save(userState);
-        return savedUserState;
+        synchronized (this) {
+            UserState savedUserState = userState = userStateRepository.save(userState);
+            return savedUserState;
+        }
     }
 }

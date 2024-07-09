@@ -22,7 +22,7 @@ public class Place {
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "currentPlace", cascade = CascadeType.ALL )
     private List<UserState> listOfUserState;
 
-    @ManyToMany(mappedBy = "listOfPlaces", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "listOfPlaces", fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private List<User> listOfUser;
 
     @Embedded

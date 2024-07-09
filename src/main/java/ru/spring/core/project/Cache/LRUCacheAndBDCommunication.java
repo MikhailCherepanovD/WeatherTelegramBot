@@ -1,6 +1,7 @@
 package ru.spring.core.project.Cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 import ru.spring.core.project.DBService.impl.PlaceServiceImpl;
 import ru.spring.core.project.DBService.impl.UserServiceImpl;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Component
 public class LRUCacheAndBDCommunication {
+    private final int AMOUNT_CACHED_USERS=5;
     @Autowired
     private PlaceServiceImpl placeService;
     @Autowired
@@ -21,22 +23,28 @@ public class LRUCacheAndBDCommunication {
     @Autowired
     private WeatherDataServiceImpl weatherDataService;
     private LRUCache<Long,User>  lruCacheUsers;
+    @Autowired
+    ClassPathXmlApplicationContext context;
 
     public LRUCacheAndBDCommunication(){
-        lruCacheUsers = new LRUCache<>(3);
+        lruCacheUsers = new LRUCache<>(AMOUNT_CACHED_USERS);
     }
 
     public User addUser(User user){
         lruCacheUsers.put(user.getChatId(),user);
-        userService.addUserIfNotExistByChatId(user);
-        userStateService.addUserState(user.getUserState());
+        ThreadSave threadSave = new ThreadSave();
+        threadSave.setUserService(userService);
+        threadSave.setUser(user);
+        threadSave.start();
         return user;
     }
 
     public User updateUser(User user){
         lruCacheUsers.put(user.getChatId(),user);
-        userService.updateUser(user);
-        userStateService.updateUserState(user.getUserState());
+        ThreadUpdate threadUpdate = new ThreadUpdate();
+        threadUpdate.setUserService(userService);
+        threadUpdate.setUser(user);
+        threadUpdate.start();
         return user;
     }
     public boolean userIsExist(Long chatId){

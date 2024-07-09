@@ -21,7 +21,7 @@ public class User {
     @Column(name = "CHAT_ID")
     private long chatId;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)       //Merge - нужен для того чтобы уже сохраненные объекты не сохранялись заново, иначе ALL
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)       //Merge - нужен для того чтобы уже сохраненные объекты не сохранялись заново, иначе ALL
     @JoinTable(
             name = "USER_PLACE",
             joinColumns = @JoinColumn(name = "USER_ID"),
