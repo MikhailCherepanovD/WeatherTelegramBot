@@ -81,7 +81,9 @@ Results of tests:
 
 By city name:
 
-![](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/TelegramBot.gif)
+<img src="https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/TelegramBot.gif" alt="" width="500"/>
 
 By location:
-<img src="https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/sentLocation.jpg" alt="" width="300"/>
+
+
+<img src="https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/sentLocation.jpg" alt="" width="500"/>
