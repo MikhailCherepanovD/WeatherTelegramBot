@@ -41,15 +41,15 @@ Scheme of database:
 
 
 
-To reduce the number of accesses to the OpenWeatherMap api:
+#### To reduce the number of accesses to the OpenWeatherMap api:
  
  The weather forecast for the current day is saved in the database. Then, if the weather forecast for the requested period is in the database, it is taken from there.
 
-To reduce the number of accesses to the database:
+#### To reduce the number of accesses to the database:
 
 The N last users are saved in LRUCache based on LinkedHashMap;
 
-To reduce waiting time:
+#### To reduce waiting time:
 
 Updating users in the database after updating in the cache occurs in distinct threads.
 
@@ -74,10 +74,14 @@ Results of tests:
 
 
 
-## Dependencies:
 
-## To install:
 
-## To run:
 
 ## How it work:
+
+By city name:
+
+![](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/TelegramBot.gif)
+
+By location:
+![](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/sentLocation.jpg)
