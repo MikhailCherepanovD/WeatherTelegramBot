@@ -1,20 +1,21 @@
 # Telegram Weather Bot
-This bot provide the opportunaty to find out the weather by city name or location.
+This bot provide the opportunity to find out the weather by city name or location.
 
+Gets the weather forecast from: OpenWeatherMap api;
 
 ## Bot's commands
 
-/start  -  send welcome message, save the user in database;
+/start  -  sends welcome message, save the user in the database;
 
-/help  - send help message;
+/help  - sends a help message;
 
-/show - show list of saved places by user;
+/show - shows list of saved places by the user;
 
-/clear - clear list of places by user;
+/clear - clears list of places saved by the user;
 
 Apart from:
 
-#### After sending city name or location bot provide to choise weather forecast option:
+#### After sending city name or location bot provides a choice of weather forecast option:
 
 /now 
 
@@ -32,22 +33,22 @@ Apart from:
 
 ### Database
 
-Database implement using PostgreSQL and Spring Data JPA
+The database is implemented using PostgreSQL and Spring Data JPA
 
-Scheme of database:
+Scheme of the database:
 
 ![](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/schemaDB.png)
 
 
 
 
-#### To reduce the number of accesses to the OpenWeatherMap api:
+#### To reduce the number of accesses to the OpenWeatherMap API:
  
  The weather forecast for the current day is saved in the database. Then, if the weather forecast for the requested period is in the database, it is taken from there.
 
 #### To reduce the number of accesses to the database:
 
-The N last users are saved in LRUCache based on LinkedHashMap;
+The last N users are saved in LRUCache based on LinkedHashMap;
 
 #### To reduce waiting time:
 
@@ -60,10 +61,10 @@ Updating users in the database after updating in the cache occurs in distinct th
 Implemented classes:
 
 
-[SingleUserTest](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/src/test/java/ru/spring/core/project/SingleUserTest.java)  - Modulating a single user scenario;
+[SingleUserTest](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/src/test/java/ru/spring/core/project/SingleUserTest.java)  - Simulating a single user scenario;
 
 
-[MultiUserTest](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/src/test/java/ru/spring/core/project/MultiUserTest.java)  - Modulating the scenario of ten users, each of whom watches the weather in ten places;
+[MultiUserTest](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/src/test/java/ru/spring/core/project/MultiUserTest.java)  - Simulating the scenario of ten users, each of whom watches the weather in ten places;
 
 
 Results of tests:
@@ -79,11 +80,11 @@ Results of tests:
 
 ## How it work:
 
-By city name:
+#### By city name:
 
 <img src="https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/TelegramBotCommunication.gif" alt="" width="500"/>
 
-By location:
+#### By location:
 
 
 <img src="https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/sentLocation.jpg" alt="" width="500"/>
