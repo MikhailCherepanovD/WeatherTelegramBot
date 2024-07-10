@@ -81,10 +81,11 @@ Results of tests:
 ## How it work:
 
 #### By city name:
-
+<p align="center">
 <img src="https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/TelegramBotCommunication.gif" alt="" width="500"/>
-
+</p>
 #### By location:
 
-
+<p align="center">
 <img src="https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/sentLocation.jpg" alt="" width="500"/>
+</p>
