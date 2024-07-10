@@ -363,7 +363,7 @@ public class WeatherBot extends TelegramLongPollingBot {
         double longitude = update.getMessage().getLocation().getLongitude();
         CoordinateForWeatherBot coordinateForWeatherBot = new CoordinateForWeatherBot(latitude,longitude);
         String response = Double.toString(latitude)+" "+Double.toString(longitude);
-        sendMessage(chatId,response);
+        //sendMessage(chatId,response);
         response = "Выберете период:\n" +
                 "/now\n"+
                 "/today\n" +
