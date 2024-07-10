@@ -84,4 +84,4 @@ By city name:
 ![](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/TelegramBot.gif)
 
 By location:
-![](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/sentLocation.jpg)
+<img src="https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/sentLocation.jpg" alt="" width="300"/>
