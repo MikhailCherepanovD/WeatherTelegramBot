@@ -84,6 +84,7 @@ Results of tests:
 <p align="center">
 <img src="https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/GitHubResources/TelegramBotCommunication.gif" alt="" width="500"/>
 </p>
+
 #### By location:
 
 <p align="center">
