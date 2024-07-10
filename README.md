@@ -1,7 +1,7 @@
 # Telegram Weather Bot
 This bot provide the opportunity to find out the weather by city name or location.
 
-Gets the weather forecast from: OpenWeatherMap api;
+Gets the weather forecast from: [OpenWeatherMap API](https://openweathermap.org/);
 
 ## Bot's commands
 
@@ -58,7 +58,7 @@ Updating users in the database after updating in the cache occurs in distinct th
 
 ### Testing 
 
-Implemented classes:
+Implemented classes(Using JUnit):
 
 
 [SingleUserTest](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/src/test/java/ru/spring/core/project/SingleUserTest.java)  - Simulating a single user scenario;
