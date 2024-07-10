@@ -41,3 +41,43 @@ Scheme of database:
 
 
 
+To reduce the number of accesses to the OpenWeatherMap api:
+ 
+ The weather forecast for the current day is saved in the database. Then, if the weather forecast for the requested period is in the database, it is taken from there.
+
+To reduce the number of accesses to the database:
+
+The N last users are saved in LRUCache based on LinkedHashMap;
+
+To reduce waiting time:
+
+Updating users in the database after updating in the cache occurs in distinct threads.
+
+
+
+### Testing 
+
+Implemented classes:
+
+
+[SingleUserTest](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/src/test/java/ru/spring/core/project/SingleUserTest.java)  - Modulating a single user scenario;
+
+
+[MultiUserTest](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/src/test/java/ru/spring/core/project/MultiUserTest.java)  - Modulating the scenario of ten users, each of whom watches the weather in ten places;
+
+
+Results of tests:
+
+[MultiUserTest](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/src/test/java/ru/spring/core/project/TestLog/MultiUserTest.log) 
+
+[SingleUserTest](https://github.com/MikhailCherepanovD/WeatherBotRepository/blob/master/src/test/java/ru/spring/core/project/TestLog/SingleUserTest.log) 
+
+
+
+## Dependencies:
+
+## To install:
+
+## To run:
+
+## How it work:
