@@ -43,6 +43,8 @@
                 <prop key="hibernate.hbm2ddl.auto">create</prop><!-- Если нам не нужно создавать БД заново, указать create/update-->
             </props>
         </property>
+        <!-- Add this property to specify the correct interface -->
+        <property name="entityManagerFactoryInterface" value="jakarta.persistence.EntityManagerFactory" />
     </bean>
 
 
@@ -52,7 +54,5 @@
     <jpa:repositories base-package="ru.spring.core.project.repositories" />
     <context:component-scan base-package="ru.spring.core.project"/>
     <context:property-placeholder location="classpath:application.properties"/>
-
-
 
 </beans>
